@@ -4,13 +4,13 @@ Apex trade comments/magic numbers may encode an internal strategy ID (see exampl
 
 ## Status
 
-🟠 HYPOTHESIS — no strategy ID has been confirmed to map to a distinct, reproducible behaviour yet.
+🟠 HYPOTHESIS — see [H-001](Hypotheses.md#h-001-apex-operates-a-fixed-12-slot-gridlayer-identifier-per-symbol). A recurring 12-value ID pattern has been observed across 8 independent backtests, but no ID has been confirmed to map to a *distinct behaviour* yet (only to a distinct label).
 
 ## Known Identifiers
 
 | Strategy ID | Confidence | Observed behaviour summary | Evidence | Notes |
 |---|---|---|---|---|
-| _?_ | 🟠 | | | Populate as trade data accumulates in `output/csv/` |
+| `15743<N>`, N = 0–11 (12 values total) | 🟠 | Recurring, reused entry-comment values on XAUUSD; not unique per trade. Frequency is uneven — in E-001 (personal 2023), ID `1574310` accounts for 1626/4017 entries while `157430` accounts for only 13. | E-001 through E-008 | Uneven frequency across the 12 IDs is itself unexplained — see Open Questions below. |
 
 ## How to identify a strategy ID
 
@@ -23,3 +23,7 @@ Apex trade comments/magic numbers may encode an internal strategy ID (see exampl
 ## Open Questions
 
 See [research/Questions.md](../research/Questions.md) for the running list — mirror strategy-specific open questions here as they arise.
+
+- Why is entry frequency so uneven across the 12 IDs (1626 vs 13 in E-001)? Grid distance from current price at signal time? Some kind of priority/weighting?
+- Do the 12 IDs persist as the *same* 12 values across different symbols, or are they XAUUSD-specific? Untested — no other symbol has appeared in any evidence yet.
+- Is `15743` itself meaningful (e.g. derived from account/chart ID) or arbitrary?

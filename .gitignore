@@ -21,11 +21,12 @@ desktop.ini
 .env
 *.local
 
-# Large / regenerable output (keep folder structure via .gitkeep, ignore contents)
+# output/csv/ holds the structured trade JSON database (scripts/batch_parse.py
+# output) — that's a research deliverable, not a build artifact, so it's
+# tracked. Graphs/reports stay ignored since those are throwaway visual
+# exports regenerable from the same data.
 output/graphs/*
 !output/graphs/.gitkeep
-output/csv/*
-!output/csv/.gitkeep
 output/reports/*
 !output/reports/.gitkeep
 

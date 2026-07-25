@@ -4,7 +4,11 @@ Current best behavioural model of Apex's internal architecture. This document is
 
 ## Status
 
-🟠 **HYPOTHESIS** — No architecture diagram has been confirmed yet. This file is a placeholder skeleton for the research team to fill in as evidence accumulates.
+🟠 **HYPOTHESIS** overall — the diagram below is still unconfirmed. One 🟢 CONFIRMED structural fact has emerged, though (see next section).
+
+## 🟢 Confirmed: Apex runs on top of a generic engine called "Zennbot"
+
+Directly observed in all 3 preset files (E-009, E-010, E-011): each opens with `; Zennbot` / `ZennbotPresetName=...`, and every setting key is namespaced either generically (`Trading_`, `BacktestRealism_`, `Timezone_`, `MaxDrawdown_`, `ScheduledClose_`, `TimeFilter_`, `DailyProfitTarget_`, `Limits_`, `RandomizedValues_`) or `Apex_`-specific (currently only `Apex_LotSize_*`). See [H-003](Hypotheses.md#h-003-apex-is-a-strategy-configuration-preset-running-on-top-of-a-generic-multi-feature-bot-engine-called-zennbot) for the (still-hypothesis) architectural interpretation of what this split implies for the diagram below.
 
 ## Working Model (draft)
 

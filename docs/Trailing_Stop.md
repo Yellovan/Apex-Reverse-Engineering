@@ -4,7 +4,7 @@ Behavioural analysis of Apex's trailing-stop logic, if any.
 
 ## Status
 
-🟠 HYPOTHESIS — not yet investigated.
+🟠 HYPOTHESIS — initial evidence found, see [H-002](Hypotheses.md#h-002-apex-trails-its-stop-loss-progressively-into-profit-rather-than-using-a-static-sl). Not yet promoted: needs a dedicated experiment (see below) and independent review before 🟡.
 
 ## Questions to Answer
 
@@ -24,8 +24,8 @@ _None yet._
 
 ## Hypotheses (🟠)
 
-_None logged yet — raise new ones in [Hypotheses.md](Hypotheses.md) tagged `Trailing Stop` and mirror the summary line here._
+- [H-002](Hypotheses.md#h-002-apex-trails-its-stop-loss-progressively-into-profit-rather-than-using-a-static-sl) — SL is repeatedly modified toward and past entry price rather than staying static; directly observed in the journal (E-016, position #7160: SL modified 3956.37 → 3997.85 → 4040.51, closing above the 4038.99 entry) and consistent with aggregate stats (70–77% of exits are `sl`-tagged across 8 backtests, yet win rate is 77–86%, meaning most `sl` exits are profitable).
 
 ## Evidence
 
-See [Evidence.md](Evidence.md) for the full index. Relevant IDs: _none indexed yet_.
+See [Evidence.md](Evidence.md) for the full index. Relevant IDs: E-001 through E-008 (aggregate exit-reason/win-rate statistics), E-016 (granular journal log showing the SL modification sequence).

@@ -1,5 +1,5 @@
 """
-Parse an MT5 Strategy Tester HTML report ("Deals" table) into raw row dicts.
+Parse an MT5 Strategy Tester HTML report's "Deals" section into raw row dicts.
 
 This module only extracts what is literally printed in the report — it does not
 interpret, pair, or classify anything. That happens downstream in
@@ -7,14 +7,22 @@ trade_parser.py. Keeping this boundary means a change in how we identify
 strategies or pair round-trip trades never requires re-touching the HTML
 parsing itself.
 
-MT5 Strategy Tester reports (Report > Save as Report, "Detailed report") contain
-a "Deals" section as an HTML <table> with a header row roughly like:
+MT5 Strategy Tester reports (Report > Save as Report, "Detailed report") are
+NOT multiple separate <table> elements — the whole report (Settings, Results,
+Orders, Deals) is ONE long <table>, with each section introduced by a
+<tr><th colspan="N"><b>SectionName</b></th></tr> row, immediately followed by
+a bold column-header row, then data rows, then a bold totals row, e.g.:
 
-    Time | Deal | Symbol | Type | Direction | Volume | Price | Order | Commission | Swap | Profit | Balance | Comment
+    <tr><th colspan="13"><div><b>Deals</b></div></th></tr>
+    <tr><td><b>Tijd</b></td><td><b>Deal</b></td>...</tr>
+    <tr><td>2023.01.03 03:03:10</td><td>16</td>...</tr>
+    ...
+    <tr><td colspan="8"></td><td><b>-5 108.16</b></td>...</tr>   <- totals row
 
-Column presence/order can vary slightly between terminal builds and broker
-report templates, so this parser matches columns by header name rather than
-fixed position.
+The report's UI language changes the header labels (Dutch: Tijd/Symbool/
+Soort/Richting/Prijs/Opdracht/Commissie/Winst/Saldo/Opmerkingen) but MT5 keeps
+deal type ("buy"/"sell"/...) and direction ("in"/"out") values in English
+regardless of locale, so those are matched literally in trade_parser.py.
 """
 
 from __future__ import annotations
@@ -27,40 +35,41 @@ from pathlib import Path
 from bs4 import BeautifulSoup
 
 # Header text (lowercased) -> normalised field name we store it under.
+# Includes English and Dutch (MT5 NL locale) labels; add more locales here as
+# they show up in evidence rather than guessing them in advance.
 _HEADER_MAP = {
-    "time": "time",
+    "time": "time", "tijd": "time",
     "deal": "deal_id",
-    "symbol": "symbol",
-    "type": "type",
-    "direction": "direction",
+    "symbol": "symbol", "symbool": "symbol",
+    "type": "type", "soort": "type",
+    "direction": "direction", "richting": "direction",
     "volume": "volume",
-    "price": "price",
-    "order": "order_id",
-    "commission": "commission",
+    "price": "price", "prijs": "price",
+    "order": "order_id", "opdracht": "order_id",
+    "commission": "commission", "commissie": "commission",
     "swap": "swap",
-    "profit": "profit",
-    "balance": "balance",
-    "comment": "comment",
-    "s / l": "sl",
-    "sl": "sl",
-    "t / p": "tp",
-    "tp": "tp",
+    "profit": "profit", "winst": "profit",
+    "balance": "balance", "saldo": "balance",
+    "comment": "comment", "opmerkingen": "comment",
+    "s / l": "sl", "sl": "sl",
+    "t / p": "tp", "tp": "tp",
 }
 
 
-def _find_deals_table(soup: BeautifulSoup):
-    """Locate the 'Deals' table by finding its section header, MT5 reports are
-    one long HTML page with multiple tables (Settings, Results, Orders, Deals)."""
-    for bold in soup.find_all(["b", "th"]):
-        if bold.get_text(strip=True).lower() == "deals":
-            table = bold.find_parent("table")
-            if table is not None:
-                next_table = table.find_next("table")
-                if next_table is not None:
-                    return next_table
-    # Fallback: last table in the document (Deals is normally the final section).
-    tables = soup.find_all("table")
-    return tables[-1] if tables else None
+def _find_section_title_row(soup: BeautifulSoup, section_name: str):
+    """Find the <tr> containing the bold section header (e.g. '<b>Deals</b>' in a <th>)."""
+    for th in soup.find_all("th"):
+        if th.get_text(strip=True).lower() == section_name.lower():
+            return th.find_parent("tr")
+    return None
+
+
+def _row_is_bold(row) -> bool:
+    """True if every non-empty cell in this row is entirely bold (totals/header rows)."""
+    cells = row.find_all("td")
+    if not cells:
+        return False
+    return all(cell.find("b") is not None for cell in cells if cell.get_text(strip=True))
 
 
 def parse_deals(html_path: str | Path) -> list[dict]:
@@ -73,27 +82,30 @@ def parse_deals(html_path: str | Path) -> list[dict]:
         raw = html_path.read_text(encoding="utf-8", errors="ignore")
 
     soup = BeautifulSoup(raw, "html.parser")
-    table = _find_deals_table(soup)
-    if table is None:
+    title_row = _find_section_title_row(soup, "Deals")
+    if title_row is None:
         return []
 
-    rows = table.find_all("tr")
-    if not rows:
+    header_row = title_row.find_next_sibling("tr")
+    if header_row is None:
         return []
 
-    header_cells = [c.get_text(strip=True).lower() for c in rows[0].find_all(["th", "td"])]
+    header_cells = [c.get_text(strip=True).lower() for c in header_row.find_all("td")]
     fields = [_HEADER_MAP.get(h, h.replace(" ", "_")) for h in header_cells]
 
     deals = []
-    for row in rows[1:]:
+    row = header_row.find_next_sibling("tr")
+    while row is not None:
+        if row.find("th") is not None:
+            break  # a new section started — Deals is normally last, but don't assume
+        if _row_is_bold(row):
+            break  # totals row marks the end of the data rows
         cells = [c.get_text(strip=True) for c in row.find_all("td")]
-        if not cells or len(cells) != len(fields):
-            continue
-        record = dict(zip(fields, cells))
-        # Skip separator/section rows that slipped in (e.g. a "Deals" title row).
-        if record.get("time", "").lower() in ("", "deals"):
-            continue
-        deals.append(record)
+        if cells and len(cells) == len(fields):
+            record = dict(zip(fields, cells))
+            if record.get("time"):
+                deals.append(record)
+        row = row.find_next_sibling("tr")
 
     return deals
 

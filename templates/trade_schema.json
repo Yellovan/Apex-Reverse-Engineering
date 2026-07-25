@@ -19,11 +19,19 @@
     },
     "sl": {
       "type": ["number", "null"],
-      "description": "Stop loss price at open (or at time of parsing, if it moved). Null if not present in the source report's Deals table (SL/TP are often only recorded on the Orders table)."
+      "description": "Stop loss price. Populated either from the entry order's own SL column (if the source report has one) or, more commonly, from the closing deal's comment when MT5 records the trigger price directly (e.g. 'sl 2062.52') — see exit_reason."
     },
     "tp": {
       "type": ["number", "null"],
-      "description": "Take profit price, if set."
+      "description": "Take profit price. Populated either from the entry order's own TP column, or from the closing deal's comment when the trigger price is recorded there (e.g. 'tp 1838.47') — see exit_reason."
+    },
+    "exit_reason": {
+      "type": ["string", "null"],
+      "description": "Why the trade closed, as literally stamped on the closing deal's comment by MT5: 'tp', 'sl', or null if the closing comment didn't match that pattern (e.g. manual close, opposite signal, end of test). Directly relevant to docs/Trailing_Stop.md and docs/BreakEven.md."
+    },
+    "profit": {
+      "type": ["number", "null"],
+      "description": "Net profit/loss of the closing deal, taken directly from the report's Profit/Winst column. Enables real win-rate calculation per strategy (see scripts/statistics.py)."
     },
     "trail": {
       "type": ["number", "null"],

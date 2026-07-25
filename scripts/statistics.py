@@ -6,18 +6,13 @@ Loads one or more JSON trade files produced by trade_parser.py, groups by
 not been identified yet — see docs/Strategy_Map.md), and reports:
 
 - trade count
-- win rate (requires `exit`/`profit`-derivable data; see note below)
+- win rate (from the `profit` field trade_parser.py lifts off the closing deal)
 - average SL distance, average TP distance (in price units, not points —
   point-normalisation depends on the symbol's tick size, deliberately left
   to the caller since this script is symbol-agnostic)
 - average trade duration (minutes)
 - average trailing distance, where recorded
-
-Win rate needs a profit sign, which round-trip pairing (trade_parser.py)
-does not currently carry through into the schema. Until a `profit` field is
-added to the schema (see templates/trade_schema.json), win rate is computed
-from entry/exit direction only when unambiguous, and reported as `None`
-otherwise rather than guessed.
+- exit reason breakdown (tp / sl / other), from the `exit_reason` field
 """
 
 from __future__ import annotations
@@ -68,15 +63,25 @@ def summarize(trades: list[dict]) -> dict:
         ]
         durations = [t["duration_minutes"] for t in group if t.get("duration_minutes") is not None]
         trails = [t["trail"] for t in group if t.get("trail") is not None]
+        profits = [t["profit"] for t in group if t.get("profit") is not None]
+        exit_reasons = [t["exit_reason"] for t in group if t.get("exit_reason") is not None]
+
+        wins = sum(1 for p in profits if p > 0)
+        win_rate = round(wins / len(profits), 4) if profits else None
 
         report[str(strategy)] = {
             "trade_count": len(group),
+            "win_rate": win_rate,
+            "win_rate_sample_size": len(profits),
             "avg_sl_distance": _mean(sl_distances),
             "avg_tp_distance": _mean(tp_distances),
             "avg_duration_minutes": _mean(durations),
             "avg_trailing_distance": _mean(trails),
             "sl_distance_sample_size": len(sl_distances),
             "tp_distance_sample_size": len(tp_distances),
+            "exit_reason_counts": {
+                reason: exit_reasons.count(reason) for reason in sorted(set(exit_reasons))
+            },
         }
     return report
 

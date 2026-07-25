@@ -1,0 +1,63 @@
+; Zennbot
+ZennbotPresetName=Apex personal 0
+; Trading
+Trading_Enabled=true
+Trading_CloseAllNow=false
+Trading_Slippage=40
+; Backtest Realism
+BacktestRealism_Enable=false
+BacktestRealism_EntrySlippageMin=3
+BacktestRealism_EntrySlippageMax=15
+BacktestRealism_SLSlippageMin=5
+BacktestRealism_SLSlippageMax=25
+BacktestRealism_Seed=0
+; Daily Reset
+Timezone_Selected=1
+Timezone_DayStartTime=00:00
+; Max Drawdown
+MaxDrawdown_Enable=true
+MaxDrawdown_Percentage=100
+MaxDrawdown_Amount=0
+MaxDrawdown_AbsoluteEquityLimit=0
+MaxDrawdown_RemoveEA=false
+; Scheduled Close
+ScheduledClose_Enable=true
+ScheduledClose_Timezone=3
+ScheduledClose_Scope=0
+ScheduledClose_Monday=16:45
+ScheduledClose_Tuesday=16:45
+ScheduledClose_Wednesday=16:45
+ScheduledClose_Thursday=16:45
+ScheduledClose_Friday=16:45
+ScheduledClose_Saturday=
+ScheduledClose_Sunday=
+ScheduledClose_CooldownMinutes=60
+; Time Filter
+TimeFilter_Enable=false
+TimeFilter_Monday=00:00-23:59
+TimeFilter_Tuesday=00:00-23:59
+TimeFilter_Wednesday=00:00-23:59
+TimeFilter_Thursday=00:00-23:59
+TimeFilter_Friday=00:00-23:59
+TimeFilter_Saturday=
+TimeFilter_Sunday=
+; Daily Profit Target
+DailyProfitTarget_Enable=false
+DailyProfitTarget_Amount=500
+DailyProfitTarget_Percent=2
+; Entry Limits
+Limits_MaxBuy=0
+Limits_MaxSell=0
+Limits_MaxSpread=500
+; Randomized Values
+RandomizedValues_Enable=false
+RandomizedValues_TPSLPercent=2
+RandomizedValues_EntryPricePoints=25
+RandomizedValues_SkipOrdersPercent=5
+; Apex Lot Sizing
+Apex_LotSize_Mode=2
+Apex_LotSize_Fixed=0.01
+Apex_LotSize_Percent=0.1
+Apex_LotSize_AutoLotMultiplier=5
+Apex_LotSize_OverrideBalance=0
+Apex_LotSize_CheckMargin=true

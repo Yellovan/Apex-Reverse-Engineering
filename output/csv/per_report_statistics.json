@@ -1,0 +1,138 @@
+{
+  "personal-2023": {
+    "unknown": {
+      "trade_count": 4017,
+      "win_rate": 0.8564,
+      "win_rate_sample_size": 4017,
+      "avg_sl_distance": 5.1419,
+      "avg_tp_distance": 10.46842,
+      "avg_duration_minutes": 445.59676,
+      "avg_trailing_distance": null,
+      "sl_distance_sample_size": 3057,
+      "tp_distance_sample_size": 959,
+      "exit_reason_counts": {
+        "sl": 3057,
+        "tp": 959
+      }
+    }
+  },
+  "prop-2023": {
+    "unknown": {
+      "trade_count": 4036,
+      "win_rate": 0.7931,
+      "win_rate_sample_size": 4036,
+      "avg_sl_distance": 4.87243,
+      "avg_tp_distance": 10.92924,
+      "avg_duration_minutes": 205.9114,
+      "avg_trailing_distance": null,
+      "sl_distance_sample_size": 2592,
+      "tp_distance_sample_size": 711,
+      "exit_reason_counts": {
+        "sl": 2592,
+        "tp": 711
+      }
+    }
+  },
+  "personal-2024": {
+    "unknown": {
+      "trade_count": 3894,
+      "win_rate": 0.8354,
+      "win_rate_sample_size": 3894,
+      "avg_sl_distance": 6.8363,
+      "avg_tp_distance": 13.82947,
+      "avg_duration_minutes": 325.86029,
+      "avg_trailing_distance": null,
+      "sl_distance_sample_size": 2993,
+      "tp_distance_sample_size": 890,
+      "exit_reason_counts": {
+        "sl": 2993,
+        "tp": 890
+      }
+    }
+  },
+  "prop-2024": {
+    "unknown": {
+      "trade_count": 3815,
+      "win_rate": 0.7738,
+      "win_rate_sample_size": 3815,
+      "avg_sl_distance": 6.59872,
+      "avg_tp_distance": 14.33578,
+      "avg_duration_minutes": 164.08304,
+      "avg_trailing_distance": null,
+      "sl_distance_sample_size": 2580,
+      "tp_distance_sample_size": 734,
+      "exit_reason_counts": {
+        "sl": 2580,
+        "tp": 734
+      }
+    }
+  },
+  "personal-2025": {
+    "unknown": {
+      "trade_count": 3555,
+      "win_rate": 0.8557,
+      "win_rate_sample_size": 3555,
+      "avg_sl_distance": 9.93043,
+      "avg_tp_distance": 21.92266,
+      "avg_duration_minutes": 235.86034,
+      "avg_trailing_distance": null,
+      "sl_distance_sample_size": 2798,
+      "tp_distance_sample_size": 757,
+      "exit_reason_counts": {
+        "sl": 2798,
+        "tp": 757
+      }
+    }
+  },
+  "prop-2025": {
+    "unknown": {
+      "trade_count": 3463,
+      "win_rate": 0.8045,
+      "win_rate_sample_size": 3463,
+      "avg_sl_distance": 9.93179,
+      "avg_tp_distance": 21.51307,
+      "avg_duration_minutes": 123.48414,
+      "avg_trailing_distance": null,
+      "sl_distance_sample_size": 2412,
+      "tp_distance_sample_size": 645,
+      "exit_reason_counts": {
+        "sl": 2412,
+        "tp": 645
+      }
+    }
+  },
+  "personal-2026-backtestfalse": {
+    "unknown": {
+      "trade_count": 1690,
+      "win_rate": 0.8533,
+      "win_rate_sample_size": 1690,
+      "avg_sl_distance": 17.96526,
+      "avg_tp_distance": 33.00131,
+      "avg_duration_minutes": 102.33689,
+      "avg_trailing_distance": null,
+      "sl_distance_sample_size": 1233,
+      "tp_distance_sample_size": 457,
+      "exit_reason_counts": {
+        "sl": 1233,
+        "tp": 457
+      }
+    }
+  },
+  "personal-2026-backtesttrue": {
+    "unknown": {
+      "trade_count": 1671,
+      "win_rate": 0.8468,
+      "win_rate_sample_size": 1671,
+      "avg_sl_distance": 17.6933,
+      "avg_tp_distance": 32.96723,
+      "avg_duration_minutes": 113.82585,
+      "avg_trailing_distance": null,
+      "sl_distance_sample_size": 1220,
+      "tp_distance_sample_size": 451,
+      "exit_reason_counts": {
+        "sl": 1220,
+        "tp": 451
+      }
+    }
+  }
+}

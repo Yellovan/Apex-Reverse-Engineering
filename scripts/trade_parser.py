@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from collections import defaultdict, deque
 from datetime import datetime
@@ -46,6 +47,17 @@ def _to_iso(value: str) -> str | None:
     return value  # keep raw string rather than silently dropping data
 
 
+def _parse_exit_comment(comment: str) -> tuple[str | None, float | None]:
+    """MT5 stamps the closing deal's comment with the reason and triggered
+    price, e.g. 'tp 1838.47' or 'sl 2062.52' — this is observed evidence of
+    which level was hit, not an inference, so it's safe to lift directly."""
+    match = re.match(r"^(tp|sl)\s+([\d.]+)$", comment.strip(), re.IGNORECASE)
+    if not match:
+        return None, None
+    reason, price = match.groups()
+    return reason.lower(), _to_float(price)
+
+
 def pair_trades(deals: list[dict], source: str) -> list[dict]:
     """Pair 'in'/'out' deals per symbol (FIFO) into structured trade records."""
     open_by_symbol: dict[str, deque] = defaultdict(deque)
@@ -71,15 +83,19 @@ def pair_trades(deals: list[dict], source: str) -> list[dict]:
             if entry_time is None:
                 continue  # cannot place this trade on the timeline; skip rather than guess
 
+            exit_reason, exit_trigger_price = _parse_exit_comment(exit_deal.get("comment", ""))
+
             trades.append({
                 "strategy": None,
                 "entry": _to_float(entry.get("price")),
                 "exit": _to_float(exit_deal.get("price")),
-                "sl": _to_float(entry.get("sl")),
-                "tp": _to_float(entry.get("tp")),
+                "sl": exit_trigger_price if exit_reason == "sl" else _to_float(entry.get("sl")),
+                "tp": exit_trigger_price if exit_reason == "tp" else _to_float(entry.get("tp")),
                 "trail": None,
                 "lot": _to_float(entry.get("volume")),
                 "comment": entry.get("comment") or None,
+                "exit_reason": exit_reason,
+                "profit": _to_float(exit_deal.get("profit")),
                 "time": entry_time,
                 "close_time": _to_iso(exit_deal.get("time", "")),
                 "symbol": symbol,
