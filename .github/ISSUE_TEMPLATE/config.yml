@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Repository README (methodology)
+    url: https://github.com/Yellovan/Apex-Reverse-Engineering#methodology
+    about: Read the confidence-tagging rules and workflow before filing an issue.

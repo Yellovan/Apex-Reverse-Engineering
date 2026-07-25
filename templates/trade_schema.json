@@ -1,0 +1,75 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ApexTrade",
+  "description": "Normalised structured record of a single observed Apex trade, parsed from a backtest, journal, or report.",
+  "type": "object",
+  "required": ["entry", "lot", "time", "source"],
+  "properties": {
+    "strategy": {
+      "type": ["integer", "null"],
+      "description": "Internal strategy ID if identifiable from comment/magic number, else null. See docs/Strategy_Map.md."
+    },
+    "entry": {
+      "type": "number",
+      "description": "Entry price."
+    },
+    "exit": {
+      "type": ["number", "null"],
+      "description": "Exit price, if the trade has closed."
+    },
+    "sl": {
+      "type": ["number", "null"],
+      "description": "Stop loss price at open (or at time of parsing, if it moved). Null if not present in the source report's Deals table (SL/TP are often only recorded on the Orders table)."
+    },
+    "tp": {
+      "type": ["number", "null"],
+      "description": "Take profit price, if set."
+    },
+    "trail": {
+      "type": ["number", "null"],
+      "description": "Observed trailing distance in points/pips, if trailing behaviour was detected. See docs/Trailing_Stop.md."
+    },
+    "lot": {
+      "type": "number",
+      "description": "Lot size."
+    },
+    "comment": {
+      "type": ["string", "null"],
+      "description": "Raw order comment or magic number as recorded by MT5."
+    },
+    "time": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Entry timestamp, ISO 8601."
+    },
+    "close_time": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "description": "Exit timestamp, ISO 8601, if closed."
+    },
+    "symbol": {
+      "type": ["string", "null"],
+      "description": "Traded symbol, if known."
+    },
+    "duration_minutes": {
+      "type": ["number", "null"],
+      "description": "Trade duration in minutes, derived from time/close_time."
+    },
+    "source": {
+      "type": "string",
+      "description": "Evidence.md ID this trade was parsed from, e.g. 'E-014' or a descriptive tag like 'backtest2025'."
+    }
+  },
+  "examples": [
+    {
+      "strategy": 5,
+      "entry": 4548.22,
+      "sl": 4492.34,
+      "tp": 4610.22,
+      "lot": 0.32,
+      "comment": "157435",
+      "time": "2025-03-04T10:22:00",
+      "source": "backtest2025"
+    }
+  ]
+}

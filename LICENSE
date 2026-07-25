@@ -1,0 +1,24 @@
+All Rights Reserved
+
+Copyright (c) 2026 Melvin
+
+This repository contains original research notes, documentation, analysis
+scripts, and structured data produced through independent behavioural
+observation of a third-party MetaTrader 5 Expert Advisor ("Apex"). It does
+not contain, distribute, or derive from the Apex binary (.ex5), its source
+code, or any decompiled, disassembled, or reverse-compiled form thereof.
+
+No permission is granted to copy, modify, distribute, sublicense, or use
+any part of this repository's original content (documentation, scripts,
+templates, structured data) without explicit written permission from the
+copyright holder.
+
+This project does not claim any ownership over, or rights to, the Apex
+Expert Advisor itself, its trademarks, or its underlying intellectual
+property. All observations recorded here are derived solely from publicly
+or personally observable behaviour (backtest reports, trade journals,
+screenshots, videos, preset files, and live trading observations) and are
+provided for private research and educational purposes only.
+
+No warranty of any kind is given regarding the accuracy, completeness, or
+fitness for any purpose of the analysis contained in this repository.

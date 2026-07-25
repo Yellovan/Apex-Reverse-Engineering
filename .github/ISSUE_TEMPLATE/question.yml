@@ -1,0 +1,25 @@
+name: Open Question
+description: Raise an open question that needs investigation, without a proposed answer yet.
+title: "[QUESTION] "
+labels: ["question"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        For questions without an answer yet. Once scoped, mirror it into `research/Questions.md` or the relevant `docs/*.md` "Questions to Answer" section.
+  - type: textarea
+    id: question
+    attributes:
+      label: Question
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Why this question matters, and what evidence (if any) prompted it.
+  - type: input
+    id: scope
+    attributes:
+      label: Related sub-system (if any)
+      placeholder: Risk Manager / Portfolio Manager / Trade Manager / Swing Detection / Pending Orders / Trailing Stop / BreakEven / Strategy Map

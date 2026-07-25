@@ -1,0 +1,50 @@
+name: Experiment
+description: Propose or log an experiment testing a specific hypothesis.
+title: "[EXPERIMENT] "
+labels: ["needs testing"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this to propose or record an experiment. See `templates/Experiment_Template.md` and `docs/Experiments.md`.
+  - type: input
+    id: hypothesis
+    attributes:
+      label: Tests hypothesis
+      placeholder: "H-001 (link to docs/Hypotheses.md#h-001)"
+    validations:
+      required: true
+  - type: textarea
+    id: purpose
+    attributes:
+      label: Purpose
+      description: What question does this experiment answer?
+    validations:
+      required: true
+  - type: textarea
+    id: procedure
+    attributes:
+      label: Procedure
+      description: Exact, reproducible steps — which backtest/symbol/period/preset, what was varied.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Result
+      description: What the hypothesis predicts, written before running the test.
+  - type: textarea
+    id: observed
+    attributes:
+      label: Observed Result
+      description: What actually happened, once run. Leave blank if not yet run.
+  - type: dropdown
+    id: conclusion
+    attributes:
+      label: Conclusion (once run)
+      options:
+        - "Not yet run"
+        - "🟢 Confirmed"
+        - "🟡 High Confidence"
+        - "🟠 Still Hypothesis (inconclusive)"
+        - "🔴 Disproven"

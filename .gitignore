@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+env/
+*.egg-info/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editors
+.vscode/
+.idea/
+*.swp
+
+# Secrets / local config
+.env
+*.local
+
+# Large / regenerable output (keep folder structure via .gitkeep, ignore contents)
+output/graphs/*
+!output/graphs/.gitkeep
+output/csv/*
+!output/csv/.gitkeep
+output/reports/*
+!output/reports/.gitkeep
+
+# Videos are large; track via Git LFS if added (see .gitattributes), never commit raw temp exports
+data/videos/*.tmp

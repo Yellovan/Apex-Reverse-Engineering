@@ -1,0 +1,14 @@
+[
+  { "name": "confirmed", "color": "0E8A16", "description": "Backed by 🟢 CONFIRMED evidence" },
+  { "name": "hypothesis", "color": "FBCA04", "description": "🟠 Untested or partially tested explanation" },
+  { "name": "needs testing", "color": "D93F0B", "description": "Requires an experiment before it can be trusted" },
+  { "name": "bug", "color": "B60205", "description": "Bug in this repo's own tooling/scripts, not Apex's behaviour" },
+  { "name": "question", "color": "CC317C", "description": "Open question, no proposed answer yet" },
+  { "name": "analysis", "color": "1D76DB", "description": "General analysis / finding write-up" },
+  { "name": "journal", "color": "5319E7", "description": "Relates to MT5 journal log evidence" },
+  { "name": "video", "color": "5319E7", "description": "Relates to video evidence" },
+  { "name": "backtest", "color": "5319E7", "description": "Relates to Strategy Tester backtest evidence" },
+  { "name": "architecture", "color": "0052CC", "description": "Relates to overall Apex architecture model" },
+  { "name": "risk", "color": "E99695", "description": "Relates to Risk Manager behaviour" },
+  { "name": "portfolio", "color": "BFD4F2", "description": "Relates to Portfolio Manager behaviour" }
+]

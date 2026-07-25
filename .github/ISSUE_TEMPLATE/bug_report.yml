@@ -1,0 +1,32 @@
+name: Tooling Bug
+description: Something in the research tooling (parsers, scripts) is broken — NOT a claim about Apex's own behaviour.
+title: "[BUG] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        For bugs in this repo's own scripts/tooling (`scripts/*.py`). A surprising Apex trading behaviour is not a "bug" — file that as a Finding or Question instead.
+  - type: input
+    id: script
+    attributes:
+      label: Script / file
+      placeholder: scripts/trade_parser.py
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behaviour
+    validations:
+      required: true

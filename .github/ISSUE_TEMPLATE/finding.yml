@@ -1,0 +1,58 @@
+name: Finding / Observation
+description: Log a behavioural observation about Apex, to be classified by confidence level.
+title: "[FINDING] "
+labels: ["analysis"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this for a concrete observation about Apex's behaviour. See `templates/Finding_Template.md` and the confidence-tagging rules in the root README before filing.
+  - type: input
+    id: category
+    attributes:
+      label: Category
+      description: Which sub-system does this relate to?
+      placeholder: Risk Manager / Portfolio Manager / Trade Manager / Swing Detection / Pending Orders / Trailing Stop / BreakEven / Strategy Map / Other
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: State the observed fact plainly. No interpretation here.
+    validations:
+      required: true
+  - type: checkboxes
+    id: evidence-type
+    attributes:
+      label: Evidence type
+      options:
+        - label: Backtest
+        - label: Journal
+        - label: Screenshot
+        - label: Video
+        - label: Preset
+        - label: Report
+  - type: input
+    id: evidence-ids
+    attributes:
+      label: Evidence.md ID(s)
+      placeholder: "E-001, E-014"
+    validations:
+      required: true
+  - type: dropdown
+    id: confidence
+    attributes:
+      label: Confidence
+      options:
+        - "🟢 Confirmed"
+        - "🟡 High Confidence"
+        - "🟠 Hypothesis"
+        - "🔴 Disproven"
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes
+      description: Interpretation, caveats, or open questions this raises.
