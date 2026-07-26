@@ -1,0 +1,257 @@
+{
+  "total_fills_observed": 176,
+  "total_explicit_close_events": 21,
+  "matched_closes": 21,
+  "unmatched_close_tickets": [],
+  "matched_trades": [
+    {
+      "ticket": "375077255",
+      "direction": "sell",
+      "lot": 0.2,
+      "entry_price": 4041.4,
+      "exit_price": 4041.4,
+      "entry_time": "03:02:33",
+      "exit_time": "04:47:26",
+      "price_diff": 0.0,
+      "win": false
+    },
+    {
+      "ticket": "375204212",
+      "direction": "sell",
+      "lot": 0.2,
+      "entry_price": 4041.43,
+      "exit_price": 4041.43,
+      "entry_time": "03:58:14",
+      "exit_time": "04:47:27",
+      "price_diff": 0.0,
+      "win": false
+    },
+    {
+      "ticket": "375209013",
+      "direction": "sell",
+      "lot": 0.04,
+      "entry_price": 4042.93,
+      "exit_price": 4042.93,
+      "entry_time": "03:57:31",
+      "exit_time": "04:47:28",
+      "price_diff": 0.0,
+      "win": false
+    },
+    {
+      "ticket": "375089391",
+      "direction": "sell",
+      "lot": 0.04,
+      "entry_price": 4042.98,
+      "exit_price": 4042.98,
+      "entry_time": "03:01:40",
+      "exit_time": "04:47:29",
+      "price_diff": 0.0,
+      "win": false
+    },
+    {
+      "ticket": "375289173",
+      "direction": "sell",
+      "lot": 0.04,
+      "entry_price": 4043.02,
+      "exit_price": 4043.02,
+      "entry_time": "04:36:15",
+      "exit_time": "04:47:30",
+      "price_diff": 0.0,
+      "win": false
+    },
+    {
+      "ticket": "375273527",
+      "direction": "sell",
+      "lot": 0.04,
+      "entry_price": 4043.05,
+      "exit_price": 4043.05,
+      "entry_time": "04:22:59",
+      "exit_time": "04:47:32",
+      "price_diff": 0.0,
+      "win": false
+    },
+    {
+      "ticket": "375204211",
+      "direction": "sell",
+      "lot": 0.04,
+      "entry_price": 4043.09,
+      "exit_price": 4043.09,
+      "entry_time": "03:35:18",
+      "exit_time": "04:47:33",
+      "price_diff": 0.0,
+      "win": false
+    },
+    {
+      "ticket": "374943471",
+      "direction": "sell",
+      "lot": 0.04,
+      "entry_price": 4043.23,
+      "exit_price": 4043.23,
+      "entry_time": "21:10:16",
+      "exit_time": "04:47:34",
+      "price_diff": 0.0,
+      "win": false
+    },
+    {
+      "ticket": "375258948",
+      "direction": "sell",
+      "lot": 0.04,
+      "entry_price": 4043.23,
+      "exit_price": 4043.23,
+      "entry_time": "04:04:21",
+      "exit_time": "04:47:36",
+      "price_diff": 0.0,
+      "win": false
+    },
+    {
+      "ticket": "375009394",
+      "direction": "sell",
+      "lot": 0.04,
+      "entry_price": 4043.25,
+      "exit_price": 4043.25,
+      "entry_time": "02:12:10",
+      "exit_time": "04:47:40",
+      "price_diff": 0.0,
+      "win": false
+    },
+    {
+      "ticket": "375185647",
+      "direction": "sell",
+      "lot": 0.04,
+      "entry_price": 4043.26,
+      "exit_price": 4043.26,
+      "entry_time": "03:20:30",
+      "exit_time": "04:47:41",
+      "price_diff": 0.0,
+      "win": false
+    },
+    {
+      "ticket": "375191736",
+      "direction": "sell",
+      "lot": 0.04,
+      "entry_price": 4043.27,
+      "exit_price": 4043.27,
+      "entry_time": "03:29:48",
+      "exit_time": "04:47:43",
+      "price_diff": 0.0,
+      "win": false
+    },
+    {
+      "ticket": "375159096",
+      "direction": "sell",
+      "lot": 0.04,
+      "entry_price": 4043.42,
+      "exit_price": 4043.42,
+      "entry_time": "03:05:12",
+      "exit_time": "04:47:44",
+      "price_diff": 0.0,
+      "win": false
+    },
+    {
+      "ticket": "375159133",
+      "direction": "sell",
+      "lot": 0.2,
+      "entry_price": 4041.8,
+      "exit_price": 4041.8,
+      "entry_time": "03:11:55",
+      "exit_time": "04:50:40",
+      "price_diff": 0.0,
+      "win": false
+    },
+    {
+      "ticket": "375009398",
+      "direction": "sell",
+      "lot": 0.2,
+      "entry_price": 4041.81,
+      "exit_price": 4041.81,
+      "entry_time": "02:14:32",
+      "exit_time": "04:50:42",
+      "price_diff": 0.0,
+      "win": false
+    },
+    {
+      "ticket": "375185652",
+      "direction": "sell",
+      "lot": 0.2,
+      "entry_price": 4041.82,
+      "exit_price": 4041.82,
+      "entry_time": "03:30:30",
+      "exit_time": "04:51:46",
+      "price_diff": 0.0,
+      "win": false
+    },
+    {
+      "ticket": "375174644",
+      "direction": "sell",
+      "lot": 0.2,
+      "entry_price": 4041.89,
+      "exit_price": 4041.89,
+      "entry_time": "03:15:09",
+      "exit_time": "04:51:49",
+      "price_diff": 0.0,
+      "win": false
+    },
+    {
+      "ticket": "374931883",
+      "direction": "sell",
+      "lot": 0.21,
+      "entry_price": 4041.54,
+      "exit_price": 4041.54,
+      "entry_time": "20:14:46",
+      "exit_time": "04:53:01",
+      "price_diff": 0.0,
+      "win": false
+    },
+    {
+      "ticket": "374937515",
+      "direction": "sell",
+      "lot": 0.21,
+      "entry_price": 4041.58,
+      "exit_price": 4041.58,
+      "entry_time": "20:21:39",
+      "exit_time": "04:53:04",
+      "price_diff": 0.0,
+      "win": false
+    },
+    {
+      "ticket": "374939961",
+      "direction": "sell",
+      "lot": 0.21,
+      "entry_price": 4041.67,
+      "exit_price": 4041.67,
+      "entry_time": "20:25:20",
+      "exit_time": "04:53:06",
+      "price_diff": 0.0,
+      "win": false
+    },
+    {
+      "ticket": "374917039",
+      "direction": "sell",
+      "lot": 0.21,
+      "entry_price": 4041.8,
+      "exit_price": 4041.8,
+      "entry_time": "19:59:23",
+      "exit_time": "04:53:07",
+      "price_diff": 0.0,
+      "win": false
+    }
+  ],
+  "win_rate_among_matched": 0.0,
+  "wins": 0,
+  "losses": 21,
+  "modification_count_summary": {
+    "positions_with_modifications": 86,
+    "avg_modifications_per_position": 3.52,
+    "max_modifications_on_one_position": 18
+  },
+  "lot_size_distribution": [
+    0.04,
+    0.16,
+    0.2,
+    0.21,
+    0.26,
+    0.37,
+    0.38,
+    0.42
+  ]
+}

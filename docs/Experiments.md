@@ -119,6 +119,57 @@ setting differences alone suggested. Filed as an update to H-004 and
 
 ---
 
+### EXP-004 — Trace live-account closes to test whether the mass-close event was a shared trigger or per-position breakeven exits
+
+**Tests hypothesis:** [H-006](Hypotheses.md#h-006) / [H-007](Hypotheses.md#h-007)
+**Date:** 2026-07-26
+**Run by:** Claude
+
+**Purpose:** H-006 flagged a burst of 19 "market buy/sell, close #ticket"
+events on 2026.07.24 as an unexplained mass-close. Determine whether this
+was a portfolio-level kill-switch reacting to a shared price/drawdown level,
+or something else — and separately, attempt the win-rate comparison H-006
+originally proposed now that the full week's raw logs (E-018) are available.
+
+**Procedure:** Wrote [`scripts/journal_log_parser.py`](../scripts/journal_log_parser.py)
+to parse all 5 raw UTF-16LE daily logs. It matches each pending-order fill
+("deal #N ... done (based on order #TICKET)") to its ticket, then matches
+every explicit "market buy/sell X, close #TICKET ..." event to that same
+ticket's original fill, computing whether the position's exit price was
+above or below its entry (direction-corrected). SL-modification counts per
+ticket were tallied separately. Output: `output/csv/e017_ultima_analysis.json`.
+
+**Expected Result:** If the mass-close was a shared trigger (drawdown
+kill-switch, TP sweep), all 21 closed positions should share a similar
+*exit* price/time relationship (e.g. all closing near one price level). If
+it's per-position, each should close near its own entry/breakeven,
+independent of the others.
+
+**Observed Result:** 176 fills observed across the week; only 21 ever
+closed (the rest remained open pending orders/positions past the log
+window). All 21 closes matched their originating ticket with certainty. All
+21 (100%) closed at **exactly** their own entry price (0.00 price
+difference, to the cent) — despite the 21 positions having been opened at
+different times (spanning ~9 hours) and at different entry prices (4041.40
+through 4043.42). This rules out a shared-price trigger — each position's
+own entry price, not a common level, determined its exit price. No other
+close events (SL/TP or otherwise) were found anywhere else in the full
+week's 3,364 log lines, and the words "triggered"/"stop loss"/"take profit"
+do not appear anywhere in this journal format (unlike the backtest journals
+E-015/E-016, which do use that phrasing).
+
+**Conclusion:** 🟡 HIGH CONFIDENCE — this is a synchronized batch breakeven
+flatten, not a shared-trigger kill-switch or ordinary SL/TP sweep. Filed as
+[H-007](Hypotheses.md#h-007). The originally-proposed win-rate comparison
+(H-006's proposed test) is **not answerable from this data** — the only
+observed exits are this different (breakeven-batch) mechanism, not
+individual SL/TP hits comparable to the backtests' 77–86% win rates. A
+longer observation window would be needed to catch enough ordinary exits.
+
+**Evidence:** [E-018](Evidence.md#e-018).
+
+---
+
 _Add new experiments below using the format:_
 
 ```

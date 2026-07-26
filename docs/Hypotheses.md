@@ -290,28 +290,105 @@ withdrawn E-014 data did.
   03:01–03:15) shows the same position's SL nudged upward in small steps
   every 1–3 minutes — the same granular trailing pattern quantified in
   [EXP-002](Experiments.md) from the backtest journal (E-016).
-- **One unexplained event:** a burst of ~19 "market buy, close #ticket"
-  events over ~11 minutes on 2026.07.24 (~04:47–04:58), all covering SELL
-  positions as price dropped through 4041→4024. Not yet interpreted — could
-  be a drawdown/risk kill-switch (`MaxDrawdown_RemoveEA` exists in the
-  presets), a grid take-profit sweep, or manual intervention by whoever
-  manages the VPS. Flagged as an open question, not a finding either way.
+- **The mass-close event is now explained — see [H-007](#h-007) below.** It
+  is not a random drawdown kill-switch; it's a synchronized batch close where
+  every position closed at its own exact entry price.
 - **A second EA runs alongside Apex** on this account: `testdaashboard
   (XAUUSD.sc,M1)`. Purpose unknown — likely an unrelated monitoring/dashboard
   tool, but not yet confirmed to have zero interaction with Apex's own logic.
 
-**Caveat:** this repo currently holds only a curated excerpt of E-017 (see
-the file's own header), not the full week — no win-rate or P&L figure has
-been computed from it, so this is a qualitative behavioural match, not a
-quantitative performance comparison. That comparison is exactly what H-005
-was trying to do before it turned out to be based on the wrong file.
+**Update 2026-07-26 — full week's raw logs received (not just an excerpt),
+quantitative analysis run via
+[`scripts/journal_log_parser.py`](../scripts/journal_log_parser.py):**
+176 pending-order fills observed across the week, 86 of which received at
+least one SL modification (avg 3.52 modifications per touched position, max
+18) — consistent with the granular-trailing pattern above. Only **21 of the
+176** opened positions closed within the observed week (the rest were still
+open pending orders/positions at the end of the log); all 21 closes were the
+[H-007](#h-007) breakeven-flatten batch.
 
-**Proposed test:** Get the full E-017 log (or, better, a structured export —
-account statement/report for 31599933) and parse it the same way as
-E-001–E-008, to compute a real win rate / risk profile for comparison
-against the backtests. Also worth investigating the mass-close event
-specifically — check whether it coincides with a drawdown threshold or a
-specific price/time trigger.
+**Caveat — the originally proposed quantitative comparison is not obtainable
+from this evidence.** The backtests' 77–86% win rates come from *individual*
+SL/TP-triggered exits. This live account's only observed closes in the week
+are a *different* exit mechanism entirely (a synchronized breakeven flatten,
+not per-position SL/TP), so there is no apples-to-apples win rate to compare
+against the backtests from this data. H-006 therefore remains a *qualitative*
+match (lot ladder, trailing pattern) — the quantitative performance
+comparison H-005 originally set out to do is still not answered, and may
+require a longer observation window (weeks/months) to catch enough
+individual SL/TP exits to compute a comparable win rate.
+
+**Proposed test:** Get a longer live-account log (multiple weeks) or a
+structured account statement for 31599933 covering enough time to observe
+individual SL/TP exits, not just the one batch-close event seen this week.
+
+---
+
+### H-007 — Apex/Zennbot flattens positions via a synchronized market-close at each position's own breakeven price, not via broker-side SL/TP triggers
+
+**Status:** 🟡 HIGH CONFIDENCE (directly measured, not inferred — still needs
+ChatGPT/Grok cross-review per the README's promotion rule before Findings.md)
+**Category:** Trade Manager
+**Raised:** 2026-07-26
+**Raised by:** Claude
+
+**Statement:** The "mass-close event" first flagged in [H-006](#h-006) (a
+burst of 19 "market buy/sell, close #ticket" events on 2026.07.24
+~04:47–04:53) is not a stop-out, a take-profit sweep, or a drawdown
+kill-switch reacting to a shared trigger price. Every one of the 21 explicit
+close events observed in the full week's log (E-017, all 5 days) closed its
+position at **exactly** that position's own original entry fill price —
+zero net price movement, to the cent, on every single one.
+
+**Supporting observations (directly measured via
+[`scripts/journal_log_parser.py`](../scripts/journal_log_parser.py) against
+[E-017](Evidence.md#e-017), output in
+`output/csv/e017_ultima_analysis.json`):**
+- 21/21 traceable closes (100%) had `exit_price == entry_price` to 2 decimal
+  places. Example: ticket #374943471, a sell filled 2026.07.23 at 21:10:16
+  at 4043.23, closed via `market buy 0.04 ..., close #374943471 sell 0.04
+  XAUUSD.sc 4043.23` at 2026.07.24 04:47:34 — over 7 hours later, at the
+  identical price.
+- These closes are spread across 11 minutes (04:47:26–04:53:07) and involve
+  positions opened at different times over the preceding ~9 hours at
+  different entry prices (4041.40 through 4043.42) — ruling out "all closed
+  because price hit one shared level." Each ticket's close price matches
+  *only its own* entry, not a common level.
+- Across the entire 5-day log, **no other close events were found at all**
+  — no line anywhere contains the words "triggered", "stop loss", or "take
+  profit" (unlike the Strategy Tester backtest journals E-015/E-016, which
+  do use that phrasing for SL/TP triggers). Every one of the 176 observed
+  fills is a pending-order fill (an *entry*), and the only *exits* seen in
+  the whole week are these 21 breakeven closes. This suggests Apex's SL/TP
+  may be enforced by the EA's own logic issuing explicit market-close
+  commands when a price condition is met, rather than by broker-native
+  stop orders that the terminal would log differently.
+
+**What this could mean (not yet distinguished):**
+1. This is Apex's actual break-even-stop mechanism in action — once price
+   revisits a position's entry after having moved favourably (the modify
+   logs show SL being trailed upward for several of these tickets earlier),
+   the EA closes it at market rather than waiting for a broker-side SL to
+   be hit, functionally converting a "trailing stop got run over" event into
+   a clean breakeven exit instead of a small loss.
+2. This is a portfolio-level flatten triggered by something external to any
+   single position (e.g. total floating P/L, a time-of-day rule, or the
+   `MaxDrawdown_*`/`ScheduledClose_*` engine-level presets) that happens to
+   pick breakeven as its exit price for each leg — less likely given how
+   precisely each price matches its own entry rather than a shared
+   portfolio-level trigger, but not ruled out.
+
+**Caveat:** only 21 closes were observed in one week from one account — too
+small a sample to rule out coincidence entirely, though 21/21 exact matches
+makes coincidence very unlikely.
+
+**Proposed test:** Get a longer log (multiple weeks) to see whether this
+breakeven-batch pattern recurs regularly (e.g. same time of day, same
+triggering condition) or was a one-off; check whether it correlates with the
+22:45 pending-order-cleanup time noted in [Trade_Manager.md](Trade_Manager.md)
+or with a specific floating-P/L threshold.
+
+**Evidence:** [E-017](Evidence.md#e-017).
 
 ## Disproven (🔴)
 
