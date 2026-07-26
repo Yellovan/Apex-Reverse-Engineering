@@ -39,7 +39,7 @@ _None yet._
 ## Hypotheses (🟠)
 
 - [H-004](Hypotheses.md#h-004-apexs-propfirm-preset-trades-meaningfully-more-conservatively-than-its-personal-account-preset) — propfirm preset is configured for materially lower risk, and [EXP-003](Experiments.md) confirms this shows up in realised trade data too: avg lot 0.351/0.370/0.258 (personal, 2023/24/25) vs 0.040/0.033/0.024 (prop) — personal risks roughly 9–15x more per trade by lot size, 8–12x more by €-risk (`|entry-sl|×lot`). The gap exceeds the 4x `AutoLotMultiplier` difference alone, suggesting `OverrideBalance` or compounding effects amplify it further (untested which).
-- [H-005](Hypotheses.md#h-005-the-live-ultima-markets-cent-account-shows-materially-different-weaker-edge-behaviour-than-the-xauusd-backtests) — the live cent account (E-014) shows a completely different risk/reward profile (near-50% win rate, asymmetric win/loss size, Sharpe 0.09) from any of the XAUUSD backtests. Not confirmed to be the same EA — see caveat in the hypothesis.
+- ~~H-005~~ — ⚠️ withdrawn 2026-07-25: E-014 turned out to be the wrong file (no MarketsVox/Ultima Markets account actually runs Apex, per Melvin). Do not cite the numbers previously listed here. Will be re-raised once a corrected file is supplied.
 
 ## Evidence
 

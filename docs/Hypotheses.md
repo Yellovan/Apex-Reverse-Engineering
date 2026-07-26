@@ -182,7 +182,7 @@ using `scripts/compare_backtests.py` across matched years.
 
 ### H-005 — The live "Ultima Markets cent" account shows materially different, weaker-edge behaviour than the XAUUSD backtests
 
-**Status:** 🟠 HYPOTHESIS — flagged as high-priority, this is the kind of "does the backtest hold up in reality" question the whole project exists to answer
+**Status:** ⚠️ EVIDENCE UNDER CORRECTION — Melvin has confirmed there is no MarketsVox/Ultima Markets account actually running Apex; E-014 appears to be the wrong file, mistakenly included in the evidence batch. **Do not treat anything below as informative about Apex until a corrected file is supplied and this is re-evaluated.** Kept here (not deleted) as a record of exactly the kind of mismatched-evidence risk the caveat below was written to guard against — see [Evidence.md](Evidence.md#e-014) for the correction note once logged.
 **Category:** Risk Manager / Portfolio Manager / Architecture
 **Raised:** 2026-07-25
 **Raised by:** Claude
