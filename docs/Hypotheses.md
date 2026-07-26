@@ -135,6 +135,18 @@ README's promotion rule this still needs ChatGPT/Grok agreement before any
 part of this moves to 🟡/🟢 as a *Finding*, not just a repeatedly-observed
 label.
 
+**Update 2026-07-26 — fourth confirmation, this time from a live terminal's
+own Experts log, not a UI label:** E-017 (a live MT5 journal, account
+31599933, broker Ultima Markets Ltd) contains the literal lines `expert
+ZennbotApex2.3beta1 (XAUUSD.sc,M30) removed` and, ~4 hours later the same
+day, `expert ZennbotApex2.4 (XAUUSD.sc,M30) loaded successfully` — a live
+version upgrade from 2.3beta1 to 2.4, captured by the terminal itself. This
+is a different kind of evidence than the first three (preset text, a
+settings dialog, an in-chart overlay) — it's the platform's own EA-lifecycle
+log — and it also confirms 2.3beta1 as a real prior live version, not just
+an inferred one. Still 🟠 pending external review per the promotion rule,
+but four independent, structurally different sources now agree.
+
 ---
 
 ### H-004 — Apex's propfirm preset trades meaningfully more conservatively than its personal-account preset
@@ -246,6 +258,60 @@ supporting evidence — e.g. does an EA name appear in any other export for
 this account?). Only after that's settled does it make sense to design a
 same-symbol comparison (there are only 2 XAUUSD.cent trades here, too few to
 compare against E-001–E-008 directly).
+
+**Resolution 2026-07-26:** answered — no, per Melvin. See H-005's status line
+and [Evidence.md](Evidence.md#e-014). The correct live-account evidence is
+E-017, evaluated fresh as [H-006](#h-006) below rather than reusing this
+entry, to keep the record of what went wrong intact.
+
+---
+
+### H-006 — Live XAUUSD.sc trading (E-017) is broadly consistent with the backtests' grid/trailing behaviour, on the same symbol this time
+
+**Status:** 🟠 HYPOTHESIS
+**Category:** Strategy Map / Trailing Stop / Trade Manager
+**Raised:** 2026-07-26
+**Raised by:** Claude
+
+**Statement:** Unlike the withdrawn H-005 (wrong account, wrong symbol),
+E-017 is a confirmed Apex deployment (see [H-003's 2026-07-26
+update](#h-003)) trading the *same* symbol as every backtest (XAUUSD, broker
+suffix `.sc`), and its observable behaviour is directionally consistent with
+what the backtests and video predicted — not contradicting it the way the
+withdrawn E-014 data did.
+
+**Supporting observations:**
+- **Lot ladder matches.** Day-1 pending orders (2026.07.20) show lot sizes
+  0.04, 0.08, 0.13, 0.16, 0.21, 0.26, 0.32, 0.38, 0.42, 0.44, 0.53 — eleven
+  distinct tiers, each placed as a mirrored buy-stop/sell-stop pair straddling
+  price. This lines up with the ~12-tier grid-depth reading from
+  [EXP-001](Experiments.md) (backtest data) and the video (E-012).
+- **SL trailing matches.** A representative sequence (E-017, 2026.07.22
+  03:01–03:15) shows the same position's SL nudged upward in small steps
+  every 1–3 minutes — the same granular trailing pattern quantified in
+  [EXP-002](Experiments.md) from the backtest journal (E-016).
+- **One unexplained event:** a burst of ~19 "market buy, close #ticket"
+  events over ~11 minutes on 2026.07.24 (~04:47–04:58), all covering SELL
+  positions as price dropped through 4041→4024. Not yet interpreted — could
+  be a drawdown/risk kill-switch (`MaxDrawdown_RemoveEA` exists in the
+  presets), a grid take-profit sweep, or manual intervention by whoever
+  manages the VPS. Flagged as an open question, not a finding either way.
+- **A second EA runs alongside Apex** on this account: `testdaashboard
+  (XAUUSD.sc,M1)`. Purpose unknown — likely an unrelated monitoring/dashboard
+  tool, but not yet confirmed to have zero interaction with Apex's own logic.
+
+**Caveat:** this repo currently holds only a curated excerpt of E-017 (see
+the file's own header), not the full week — no win-rate or P&L figure has
+been computed from it, so this is a qualitative behavioural match, not a
+quantitative performance comparison. That comparison is exactly what H-005
+was trying to do before it turned out to be based on the wrong file.
+
+**Proposed test:** Get the full E-017 log (or, better, a structured export —
+account statement/report for 31599933) and parse it the same way as
+E-001–E-008, to compute a real win rate / risk profile for comparison
+against the backtests. Also worth investigating the mass-close event
+specifically — check whether it coincides with a drawdown threshold or a
+specific price/time trigger.
 
 ## Disproven (🔴)
 

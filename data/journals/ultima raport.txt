@@ -1,0 +1,183 @@
+### EXCERPT NOTICE — read before citing this file ###
+# This is a CURATED EXCERPT of a much longer MT5 Experts journal (account
+# 31599933, "Ultima Markets Ltd", 2026.07.20-2026.07.24), pasted in full by
+# Melvin in conversation on 2026-07-26. The complete log is several thousand
+# lines; only the sections below were kept, due to output-size constraints
+# while transcribing it into this repo. Do NOT treat this file as the full
+# week's record — it is illustrative excerpts only. If exhaustive trade-by-
+# trade analysis of this week is needed, ask Melvin to re-supply the file as
+# an actual upload/attachment rather than pasted text, so it can be stored
+# and parsed in full.
+#
+# Sections kept below, in original order:
+#   A) Opening of trading day 2026.07.20 (grid placement pattern, retries
+#      while market closed, first accepted orders)
+#   B) A representative SL-trailing sequence
+#   C) A representative mass-close event (2026.07.24 ~04:47-04:56)
+#   D) The end of the log: EA name/version confirmation — ZennbotApex2.3beta1
+#      removed, ZennbotApex2.4 loaded, terminal restarts, VPS hosting note
+###################################################################
+
+## SECTION A — 2026.07.20 00:00-01:00, opening of the trading week ##
+
+2026.07.20 00:00:00.941	Trades	'31599933': buy stop 0.53 XAUUSD.sc at 4886.38 sl: 4836.68 tp: 4922.16
+2026.07.20 00:00:01.155	Trades	'31599933': failed buy stop 0.53 XAUUSD.sc at 4886.38 sl: 4836.68 tp: 4922.16 [Market closed]
+2026.07.20 00:00:01.156	Trades	'31599933': sell stop 0.53 XAUUSD.sc at 3945.14 sl: 3994.84 tp: 3909.36
+2026.07.20 00:00:01.368	Trades	'31599933': failed sell stop 0.53 XAUUSD.sc at 3945.14 sl: 3994.84 tp: 3909.36 [Market closed]
+2026.07.20 00:00:01.895	Trades	'31599933': buy stop 0.13 XAUUSD.sc at 4101.36 sl: 4020.31 tp: 4115.12
+2026.07.20 00:00:02.526	Trades	'31599933': buy stop 0.42 XAUUSD.sc at 4101.21 sl: 4074.23 tp: 4118.25
+2026.07.20 00:00:03.584	Trades	'31599933': buy stop 0.44 XAUUSD.sc at 4199.55 sl: 4179.67 tp: 4281.06
+2026.07.20 00:00:03.794	Trades	'31599933': sell stop 0.44 XAUUSD.sc at 3944.14 sl: 3964.02 tp: 3862.63
+2026.07.20 00:00:04.421	Trades	'31599933': buy stop 0.42 XAUUSD.sc at 4080.24 sl: 4045.83 tp: 4102.41
+2026.07.20 00:00:05.473	Trades	'31599933': buy stop 0.32 XAUUSD.sc at 4768.04 sl: 4698.46 tp: 4796.87
+2026.07.20 00:00:05.681	Trades	'31599933': sell stop 0.32 XAUUSD.sc at 3945.93 sl: 4015.51 tp: 3917.10
+2026.07.20 00:00:07.832	Trades	'31599933': buy stop 0.26 XAUUSD.sc at 4136.96 sl: 4117.08 tp: 4206.54
+2026.07.20 00:00:08.041	Trades	'31599933': sell stop 0.26 XAUUSD.sc at 3945.24 sl: 3965.12 tp: 3875.66
+2026.07.20 00:00:08.666	Trades	'31599933': buy stop 0.16 XAUUSD.sc at 4101.29 sl: 4010.17 tp: 4114.54
+2026.07.20 00:00:09.716	Trades	'31599933': buy stop 0.08 XAUUSD.sc at 4200.35 sl: 4186.43 tp: 4240.11
+2026.07.20 00:00:09.924	Trades	'31599933': sell stop 0.08 XAUUSD.sc at 3945.14 sl: 3959.06 tp: 3905.38
+2026.07.20 00:00:10.133	Trades	'31599933': buy stop 0.38 XAUUSD.sc at 4079.63 sl: 4026.11 tp: 4096.45
+2026.07.20 00:00:10.972	Trades	'31599933': buy stop 0.04 XAUUSD.sc at 4020.57 sl: 3938.96 tp: 4048.82
+2026.07.20 00:00:11.180	Trades	'31599933': sell stop 0.04 XAUUSD.sc at 3962.69 sl: 4044.30 tp: 3934.44
+2026.07.20 00:00:13.052	Trades	'31599933': buy stop 0.21 XAUUSD.sc at 4022.18 sl: 3988.54 tp: 4039.00
+2026.07.20 00:00:13.261	Trades	'31599933': sell stop 0.21 XAUUSD.sc at 3961.19 sl: 3994.83 tp: 3944.37
+# (repeated "failed ... [Market closed]" retries omitted — same 12 pending
+#  orders retried every ~0.2s until the market opened at the 00:05 mark)
+2026.07.20 00:05:00.210	Trades	'31599933': buy stop 0.16 XAUUSD.sc at 4101.29 sl: 4010.17 tp: 4114.54
+2026.07.20 00:05:00.420	Trades	'31599933': accepted buy stop 0.16 XAUUSD.sc at 4101.29 sl: 4010.17 tp: 4114.54
+2026.07.20 00:05:00.421	Trades	'31599933': order #363529173 buy stop 0.16 / 0.16 XAUUSD.sc at 4101.29 done in 210.488 ms
+2026.07.20 00:05:00.431	Trades	'31599933': buy stop 0.04 XAUUSD.sc at 4020.57 sl: 3938.96 tp: 4048.82
+2026.07.20 00:05:00.640	Trades	'31599933': accepted buy stop 0.04 XAUUSD.sc at 4020.57 sl: 3938.96 tp: 4048.82
+2026.07.20 00:05:00.641	Trades	'31599933': order #363529209 buy stop 0.04 / 0.04 XAUUSD.sc at 4020.57 done in 210.434 ms
+2026.07.20 00:05:00.641	Trades	'31599933': sell stop 0.04 XAUUSD.sc at 3962.69 sl: 4044.30 tp: 3934.44
+2026.07.20 00:05:00.851	Trades	'31599933': accepted sell stop 0.04 XAUUSD.sc at 3962.69 sl: 4044.30 tp: 3934.44
+2026.07.20 00:05:00.851	Trades	'31599933': order #363529268 sell stop 0.04 / 0.04 XAUUSD.sc at 3962.69 done in 210.202 ms
+2026.07.20 00:05:00.854	Trades	'31599933': buy stop 0.21 XAUUSD.sc at 4022.18 sl: 3988.54 tp: 4039.00
+2026.07.20 00:05:01.066	Trades	'31599933': order #363529300 buy stop 0.21 / 0.21 XAUUSD.sc at 4022.18 done in 212.001 ms
+2026.07.20 00:05:01.066	Trades	'31599933': sell stop 0.21 XAUUSD.sc at 3961.19 sl: 3994.83 tp: 3944.37
+2026.07.20 00:05:01.279	Trades	'31599933': order #363529388 sell stop 0.21 / 0.21 XAUUSD.sc at 3961.19 done in 212.511 ms
+2026.07.20 00:09:44.816	Network	'31599933': scanning network for access points
+2026.07.20 00:10:09.861	Network	'31599933': authorized on UltimaMarkets-Live 2 through AS06 (ping: 185.01 ms, build 5660)
+2026.07.20 00:10:10.502	Network	'31599933': terminal synchronized with Ultima Markets Ltd: 0 positions, 5 orders, 75 symbols, 0 spreads
+2026.07.20 00:10:10.502	Network	'31599933': trading has been enabled - hedging mode
+2026.07.20 00:15:00.261	Trades	'31599933': buy stop 0.13 XAUUSD.sc at 4101.36 sl: 4020.31 tp: 4115.12
+2026.07.20 00:15:00.467	Trades	'31599933': order #363541852 buy stop 0.13 / 0.13 XAUUSD.sc at 4101.36 done in 205.490 ms
+2026.07.20 00:15:00.472	Trades	'31599933': buy stop 0.42 XAUUSD.sc at 4101.21 sl: 4074.23 tp: 4118.25
+2026.07.20 00:15:00.909	Trades	'31599933': buy stop 0.32 XAUUSD.sc at 4768.04 sl: 4698.46 tp: 4796.87
+2026.07.20 00:15:01.115	Trades	'31599933': sell stop 0.32 XAUUSD.sc at 3945.93 sl: 4015.51 tp: 3917.10
+2026.07.20 00:15:01.336	Trades	'31599933': buy stop 0.38 XAUUSD.sc at 4079.63 sl: 4026.11 tp: 4096.45
+2026.07.20 00:30:00.321	Trades	'31599933': sell stop 0.38 XAUUSD.sc at 3961.19 sl: 4014.71 tp: 3944.37
+2026.07.20 01:00:00.168	Trades	'31599933': buy stop 0.53 XAUUSD.sc at 4886.38 sl: 4836.68 tp: 4922.16
+2026.07.20 01:00:00.390	Trades	'31599933': sell stop 0.53 XAUUSD.sc at 3945.14 sl: 3994.84 tp: 3909.36
+2026.07.20 01:00:00.611	Trades	'31599933': buy stop 0.44 XAUUSD.sc at 4199.55 sl: 4179.67 tp: 4281.06
+2026.07.20 01:00:00.811	Trades	'31599933': sell stop 0.44 XAUUSD.sc at 3944.14 sl: 3964.02 tp: 3862.63
+2026.07.20 01:00:01.055	Trades	'31599933': buy stop 0.26 XAUUSD.sc at 4136.96 sl: 4117.08 tp: 4206.54
+2026.07.20 01:00:01.254	Trades	'31599933': sell stop 0.26 XAUUSD.sc at 3945.24 sl: 3965.12 tp: 3875.66
+2026.07.20 01:00:01.464	Trades	'31599933': buy stop 0.08 XAUUSD.sc at 4200.35 sl: 4186.43 tp: 4240.11
+2026.07.20 01:00:01.661	Trades	'31599933': sell stop 0.08 XAUUSD.sc at 3945.14 sl: 3959.06 tp: 3905.38
+
+# Observed lot ladder on day 1 (buy+sell pairs at same lot, mirrored above/
+# below price): 0.04, 0.08, 0.13, 0.16, 0.21, 0.26, 0.32, 0.38, 0.42, 0.44,
+# 0.53 - eleven distinct tiers, consistent with the ~12-slot grid pattern
+# (H-001) seen independently in the backtests and video.
+
+## SECTION B — representative SL-trailing sequence, 2026.07.22 03:01-03:15 ##
+
+2026.07.22 03:01:00.169	Trades	'31599933': modify #369272077 buy 0.42 XAUUSD.sc sl: 4075.08, tp: 4118.38 -> sl: 4106.63, tp: 4118.38
+2026.07.22 03:01:00.379	Trades	'31599933': modify #369469998 buy 0.42 XAUUSD.sc sl: 4073.99, tp: 4118.38 -> sl: 4101.27, tp: 4118.38
+2026.07.22 03:04:00.182	Trades	'31599933': modify #369470023 buy 0.42 XAUUSD.sc sl: 4068.34, tp: 4124.63 -> sl: 4107.11, tp: 4124.63
+2026.07.22 03:04:00.392	Trades	'31599933': modify #369269256 buy 0.16 XAUUSD.sc sl: 4009.52, tp: 4114.65 -> sl: 4102.95, tp: 4114.65
+2026.07.22 03:13:00.197	Trades	'31599933': modify #369272106 buy 0.42 XAUUSD.sc sl: 4101.59, tp: 4124.63 -> sl: 4110.49, tp: 4124.63
+2026.07.22 03:15:00.380	Trades	'31599933': modify #369272106 buy 0.42 XAUUSD.sc sl: 4110.49, tp: 4124.63 -> sl: 4114.12, tp: 4124.63
+# Pattern: SL is nudged upward in small steps roughly every 1-3 minutes,
+# consistently trailing toward and past the entry price - matches H-002/
+# EXP-002's finding from the backtest journal, now also seen live.
+
+## SECTION C — mass-close event, 2026.07.24 ~04:47-04:56 ##
+
+2026.07.24 04:47:26.365	Trades	'31599933': market buy 0.2 XAUUSD.sc, close #375077255 sell 0.2 XAUUSD.sc 4041.40
+2026.07.24 04:47:26.956	Trades	'31599933': deal #337921909 buy 0.2 XAUUSD.sc at 4041.07 done (based on order #375332822)
+2026.07.24 04:47:27.445	Trades	'31599933': market buy 0.2 XAUUSD.sc, close #375204212 sell 0.2 XAUUSD.sc 4041.43
+2026.07.24 04:47:28.501	Trades	'31599933': market buy 0.04 XAUUSD.sc, close #375209013 sell 0.04 XAUUSD.sc 4042.93
+2026.07.24 04:47:29.754	Trades	'31599933': market buy 0.04 XAUUSD.sc, close #375089391 sell 0.04 XAUUSD.sc 4042.98
+2026.07.24 04:47:30.859	Trades	'31599933': market buy 0.04 XAUUSD.sc, close #375289173 sell 0.04 XAUUSD.sc 4043.02
+2026.07.24 04:47:32.235	Trades	'31599933': market buy 0.04 XAUUSD.sc, close #375273527 sell 0.04 XAUUSD.sc 4043.05
+2026.07.24 04:47:33.395	Trades	'31599933': market buy 0.04 XAUUSD.sc, close #375204211 sell 0.04 XAUUSD.sc 4043.09
+2026.07.24 04:47:34.751	Trades	'31599933': market buy 0.04 XAUUSD.sc, close #374943471 sell 0.04 XAUUSD.sc 4043.23
+2026.07.24 04:47:36.575	Trades	'31599933': market buy 0.04 XAUUSD.sc, close #375258948 sell 0.04 XAUUSD.sc 4043.23
+2026.07.24 04:47:40.596	Trades	'31599933': market buy 0.04 XAUUSD.sc, close #375009394 sell 0.04 XAUUSD.sc 4043.25
+2026.07.24 04:47:41.906	Trades	'31599933': market buy 0.04 XAUUSD.sc, close #375185647 sell 0.04 XAUUSD.sc 4043.26
+2026.07.24 04:47:43.114	Trades	'31599933': market buy 0.04 XAUUSD.sc, close #375191736 sell 0.04 XAUUSD.sc 4043.27
+2026.07.24 04:47:44.009	Trades	'31599933': market buy 0.04 XAUUSD.sc, close #375159096 sell 0.04 XAUUSD.sc 4043.42
+2026.07.24 04:50:40.513	Trades	'31599933': market buy 0.2 XAUUSD.sc, close #375159133 sell 0.2 XAUUSD.sc 4041.80
+2026.07.24 04:50:42.268	Trades	'31599933': market buy 0.2 XAUUSD.sc, close #375009398 sell 0.2 XAUUSD.sc 4041.81
+2026.07.24 04:51:46.662	Trades	'31599933': market buy 0.2 XAUUSD.sc, close #375185652 sell 0.2 XAUUSD.sc 4041.82
+2026.07.24 04:51:49.051	Trades	'31599933': market buy 0.2 XAUUSD.sc, close #375174644 sell 0.2 XAUUSD.sc 4041.89
+2026.07.24 04:53:01.041	Trades	'31599933': market buy 0.21 XAUUSD.sc, close #374931883 sell 0.21 XAUUSD.sc 4041.54
+2026.07.24 04:53:04.141	Trades	'31599933': market buy 0.21 XAUUSD.sc, close #374937515 sell 0.21 XAUUSD.sc 4041.58
+2026.07.24 04:53:06.600	Trades	'31599933': market buy 0.21 XAUUSD.sc, close #374939961 sell 0.21 XAUUSD.sc 4041.67
+2026.07.24 04:53:07.927	Trades	'31599933': market buy 0.21 XAUUSD.sc, close #374917039 sell 0.21 XAUUSD.sc 4041.80
+2026.07.24 04:58:25.429	Trades	'31599933': deal #337989410 buy 0.37 XAUUSD.sc at 4024.23 done (based on order #375403786)
+2026.07.24 04:58:25.556	Trades	'31599933': deal #337989458 buy 0.37 XAUUSD.sc at 4024.25 done (based on order #375403789)
+# Pattern: a burst of ~19 individual "market buy, close #<ticket>" events over
+# ~11 minutes, all closing SELL positions via market BUY (i.e. covering
+# shorts) as price moved down through 4041-4043 then further to ~4024.
+# Not yet interpreted - could be a drawdown/risk-kill event (see
+# MaxDrawdown_RemoveEA in the presets), a grid take-profit sweep, or manual
+# intervention. Flagged as an open question, not a finding.
+
+## SECTION D — end of log: EA name/version confirmation ##
+
+2026.07.24 08:08:34.847	Trades	'31599933': cancel order #375370881 sell stop 0.04 XAUUSD.sc at 4002.92 sl: 4087.54 tp: 3973.63
+# (~40 more "cancel order ... at market" lines omitted - end-of-week pending
+#  order cleanup, same pattern as every other day at the 22:45 mark)
+2026.07.24 11:26:13.227	Network	'31599933': scanning network for access points
+2026.07.24 11:26:38.393	Network	'31599933': scanning network finished
+2026.07.24 12:28:53.783	Experts	expert testdaashboard (XAUUSD.sc,M1) removed
+2026.07.24 12:28:53.842	Experts	expert ZennbotApex2.3beta1 (XAUUSD.sc,M30) removed
+2026.07.24 12:28:56.726	Terminal	exit with code 0
+2026.07.24 12:28:56.743	Network	'31599933': disconnected from UltimaMarkets-Live 2
+2026.07.24 12:28:57.535	Terminal	stopped with 0
+2026.07.24 12:28:57.577	Terminal	shutdown with 0
+2026.07.24 16:42:00.988	Terminal	Ultima Markets MT5 Terminal x64 build 5833 started for Ultima Markets Ltd
+2026.07.24 16:42:00.989	Terminal	Windows Server 2022 build 20348 on KVM, 2 x AMD EPYC 7713 64-Core, AVX2, 2 / 3 Gb memory, 45 / 69 Gb disk, RDP, UAC, admin, GMT+1
+2026.07.24 16:42:00.989	Terminal	C:\Users\Administrator\AppData\Roaming\MetaQuotes\Terminal\31BAB68707370702330929FC27D92E17
+2026.07.24 16:42:02.610	Experts	expert ZennbotApex2.3beta1 (XAUUSD.sc,M30) loaded successfully
+2026.07.24 16:42:02.708	Experts	expert testdaashboard (XAUUSD.sc,M1) loaded successfully
+2026.07.24 16:42:03.829	Network	'31599933': authorized on UltimaMarkets-Live 2 through AS02 (ping: 192.10 ms, build 5660)
+2026.07.24 16:42:04.238	Network	'31599933': terminal synchronized with Ultima Markets Ltd: 0 positions, 0 orders, 75 symbols, 0 spreads
+2026.07.24 16:42:04.238	Network	'31599933': trading has been enabled - hedging mode
+2026.07.24 16:42:04.497	Signal	'31599933': failed get list of signals
+2026.07.24 16:42:04.739	Trades	use MetaTrader VPS Hosting Service to speed up the execution: 1.04 ms via 'VPS Hong Kong 13' instead of 192.10 ms
+2026.07.24 16:42:07.901	Experts	expert ZennbotApex2.3beta1 (XAUUSD.sc,M30) removed
+2026.07.24 16:42:22.776	Experts	expert testdaashboard (XAUUSD.sc,M1) removed
+2026.07.24 16:42:25.346	Terminal	exit with code 0
+2026.07.24 16:42:25.348	Network	'31599933': disconnected from UltimaMarkets-Live 2
+2026.07.24 16:42:25.415	Terminal	stopped with 0
+2026.07.24 16:42:25.439	Terminal	shutdown with 0
+2026.07.24 16:43:18.491	Terminal	Ultima Markets MT5 Terminal x64 build 5833 started for Ultima Markets Ltd
+2026.07.24 16:43:18.492	Terminal	Windows Server 2022 build 20348 on KVM, 2 x AMD EPYC 7713 64-Core, AVX2, 2 / 3 Gb memory, 45 / 69 Gb disk, RDP, UAC, admin, GMT+1
+2026.07.24 16:43:19.390	Experts	expert testdaashboard (XAUUSD.sc,M1) loaded successfully
+2026.07.24 16:43:20.653	Network	'31599933': authorized on UltimaMarkets-Live 2 through AS02 (ping: 192.10 ms, build 5660)
+2026.07.24 16:43:21.077	Network	'31599933': terminal synchronized with Ultima Markets Ltd: 0 positions, 0 orders, 75 symbols, 0 spreads
+2026.07.24 16:43:21.077	Network	'31599933': trading has been enabled - hedging mode
+2026.07.24 16:43:21.258	Signal	'31599933': failed get list of signals
+2026.07.24 16:43:21.459	Trades	use MetaTrader VPS Hosting Service to speed up the execution: 1.04 ms via 'VPS Hong Kong 13' instead of 192.10 ms
+2026.07.24 16:43:37.328	Experts	expert ZennbotApex2.4 (XAUUSD.sc,M30) loaded successfully
+2026.07.24 16:44:13.192	Trades	'31599933': buy stop 0.51 XAUUSD.sc at 4886.27 sl: 4834.74 tp: 4923.37
+2026.07.24 16:44:13.399	Trades	'31599933': sell stop 0.51 XAUUSD.sc at 3945.22 sl: 3996.75 tp: 3908.12
+2026.07.24 16:44:13.610	Trades	'31599933': buy stop 0.12 XAUUSD.sc at 4164.14 sl: 4080.11 tp: 4178.41
+2026.07.24 16:44:17.029	Trades	'31599933': sell stop 0.37 XAUUSD.sc at 4023.61 sl: 4079.10 tp: 4006.17
+2026.07.24 16:44:17.638	Trades	'31599933': buy stop 0.21 XAUUSD.sc at 4139.42 sl: 4104.54 tp: 4156.86
+2026.07.24 16:44:18.067	Trades	'31599933': sell stop 0.21 XAUUSD.sc at 4023.61 sl: 4058.49 tp: 4006.17
+2026.07.24 22:45:00.166	Trades	'31599933': cancel order #377151801 buy stop 0.21 XAUUSD.sc at 4080.52 sl: 4045.64 tp: 4097.96
+2026.07.24 23:26:15.999	Network	'31599933': scanning network for access points
+2026.07.24 23:26:41.132	Network	'31599933': scanning network finished
+2026.07.24 23:32:24.379	Network	'31599933': connection to UltimaMarkets-Live 2 lost
+2026.07.24 23:34:05.018	Network	'31599933': authorized on UltimaMarkets-Live 2 through AS04 (ping: 202.89 ms, build 5660)
+2026.07.24 23:34:09.555	Network	'31599933': terminal synchronized with Ultima Markets Ltd: 0 positions, 0 orders, 75 symbols, 0 spreads
+2026.07.24 23:34:09.555	Network	'31599933': trading has been enabled - hedging mode
+2026.07.24 23:34:09.745	Signal	'31599933': failed get list of signals
+2026.07.24 23:34:38.486	Network	'31599933': terminal synchronized with Ultima Markets Ltd: 0 positions, 0 orders, 75 symbols, 0 spreads
+2026.07.24 23:34:38.486	Network	'31599933': trading has been enabled - hedging mode
+2026.07.24 23:34:38.670	Signal	'31599933': failed get list of signals

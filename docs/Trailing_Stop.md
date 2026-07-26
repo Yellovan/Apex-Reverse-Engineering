@@ -25,7 +25,8 @@ _None yet._
 ## Hypotheses (🟠)
 
 - [H-002](Hypotheses.md#h-002-apex-trails-its-stop-loss-progressively-into-profit-rather-than-using-a-static-sl) — SL is repeatedly modified toward and past entry price rather than staying static. [EXP-002](Experiments.md) quantified this: 89.7% of 78 SL-triggered closes in E-016 had a positive signed displacement (avg +0.503 price units on the profitable side), average 37 modification events per affected position. ~10.3% were genuine losing stop-outs, so the mechanism isn't risk-free, just dominant.
+- [H-006](Hypotheses.md#h-006-live-xauusdsc-trading-e-017-is-broadly-consistent-with-the-backtests-gridtrailing-behaviour-on-the-same-symbol-this-time) — the same granular trailing pattern (SL nudged upward every 1–3 minutes) appears in E-017, a confirmed live account, not just backtests — see the representative sequence for position #369272106/#369469998 on 2026.07.22.
 
 ## Evidence
 
-See [Evidence.md](Evidence.md) for the full index. Relevant IDs: E-001 through E-008 (aggregate exit-reason/win-rate statistics), E-016 (granular journal log showing the SL modification sequence).
+See [Evidence.md](Evidence.md) for the full index. Relevant IDs: E-001 through E-008 (aggregate exit-reason/win-rate statistics), E-016 (granular journal log showing the SL modification sequence), E-017 (live journal, same trailing pattern).
