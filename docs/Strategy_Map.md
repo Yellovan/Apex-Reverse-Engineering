@@ -4,13 +4,13 @@ Apex trade comments/magic numbers may encode an internal strategy ID (see exampl
 
 ## Status
 
-🟠 HYPOTHESIS — see [H-001](Hypotheses.md#h-001-apex-operates-a-fixed-12-slot-gridlayer-identifier-per-symbol). A recurring 12-value ID pattern has been observed across 8 independent backtests, but no ID has been confirmed to map to a *distinct behaviour* yet (only to a distinct label).
+🟠 HYPOTHESIS — see [H-001](Hypotheses.md#h-001-apex-operates-a-fixed-12-slot-gridlayer-identifier-per-symbol). A recurring 12-value ID pattern has been observed across 8 independent backtests plus a live terminal recording (E-012), but no ID has been confirmed to map to a *distinct behaviour* yet (only to a distinct label). [EXP-001](Experiments.md) ruled out one specific reading (fixed price levels).
 
 ## Known Identifiers
 
 | Strategy ID | Confidence | Observed behaviour summary | Evidence | Notes |
 |---|---|---|---|---|
-| `15743<N>`, N = 0–11 (12 values total) | 🟠 | Recurring, reused entry-comment values on XAUUSD; not unique per trade. Frequency is uneven — in E-001 (personal 2023), ID `1574310` accounts for 1626/4017 entries while `157430` accounts for only 13. | E-001 through E-008 | Uneven frequency across the 12 IDs is itself unexplained — see Open Questions below. |
+| `15743<N>`, N = 0–11 (12 values total) | 🟠 | Recurring, reused entry-comment values on XAUUSD; not unique per trade. Frequency is uneven — in E-001 (personal 2023), ID `1574310` accounts for 1626/4017 entries (avg lot 0.088) while `157430` accounts for only 13 (avg lot 1.008). Entry-price ranges overlap almost completely across all 12 IDs (~1807–2070 for nearly every one) — see [EXP-001](Experiments.md). | E-001 through E-008, E-012 | Video (E-012) confirms these IDs appear live on both pending orders (buy stop *and* sell stop simultaneously) and open positions, not just closed backtest deals. |
 
 ## How to identify a strategy ID
 
@@ -24,6 +24,6 @@ Apex trade comments/magic numbers may encode an internal strategy ID (see exampl
 
 See [research/Questions.md](../research/Questions.md) for the running list — mirror strategy-specific open questions here as they arise.
 
-- Why is entry frequency so uneven across the 12 IDs (1626 vs 13 in E-001)? Grid distance from current price at signal time? Some kind of priority/weighting?
-- Do the 12 IDs persist as the *same* 12 values across different symbols, or are they XAUUSD-specific? Untested — no other symbol has appeared in any evidence yet.
+- Why is entry frequency so uneven across the 12 IDs (1626 vs 13 in E-001), and why does it loosely inverse-correlate with lot size (EXP-001)? Working theory (untested): the ID indexes a grid depth / re-entry rung, where shallow/frequent rungs use small lots and rare/deep rungs use large (martingale-style recovery) lots — but this is speculation pending its own experiment.
+- Do the 12 IDs persist as the *same* 12 values across different symbols, or are they XAUUSD-specific? Still untested on backtests — but note the live account (E-014) trades entirely different symbols (forex cent-pairs) and shows almost no comment tagging at all, which doesn't help answer this (see [H-005](Hypotheses.md)).
 - Is `15743` itself meaningful (e.g. derived from account/chart ID) or arbitrary?

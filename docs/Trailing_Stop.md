@@ -4,7 +4,7 @@ Behavioural analysis of Apex's trailing-stop logic, if any.
 
 ## Status
 
-🟠 HYPOTHESIS — initial evidence found, see [H-002](Hypotheses.md#h-002-apex-trails-its-stop-loss-progressively-into-profit-rather-than-using-a-static-sl). Not yet promoted: needs a dedicated experiment (see below) and independent review before 🟡.
+🟠 HYPOTHESIS overall (per README's promotion rule — needs ChatGPT/Grok agreement, not just Claude, before this can be a Finding). Internally the evidence is now strong: [EXP-002](Experiments.md) found 89.7% of SL-triggered closes (70/78, one journal file) had the SL on the profitable side of entry at trigger, with an average of 37 SL-modification events per affected position (max 378 on one position) — i.e. continuous, granular trailing, not an occasional break-even jump.
 
 ## Questions to Answer
 
@@ -24,7 +24,7 @@ _None yet._
 
 ## Hypotheses (🟠)
 
-- [H-002](Hypotheses.md#h-002-apex-trails-its-stop-loss-progressively-into-profit-rather-than-using-a-static-sl) — SL is repeatedly modified toward and past entry price rather than staying static; directly observed in the journal (E-016, position #7160: SL modified 3956.37 → 3997.85 → 4040.51, closing above the 4038.99 entry) and consistent with aggregate stats (70–77% of exits are `sl`-tagged across 8 backtests, yet win rate is 77–86%, meaning most `sl` exits are profitable).
+- [H-002](Hypotheses.md#h-002-apex-trails-its-stop-loss-progressively-into-profit-rather-than-using-a-static-sl) — SL is repeatedly modified toward and past entry price rather than staying static. [EXP-002](Experiments.md) quantified this: 89.7% of 78 SL-triggered closes in E-016 had a positive signed displacement (avg +0.503 price units on the profitable side), average 37 modification events per affected position. ~10.3% were genuine losing stop-outs, so the mechanism isn't risk-free, just dominant.
 
 ## Evidence
 

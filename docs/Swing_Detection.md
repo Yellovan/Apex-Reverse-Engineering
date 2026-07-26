@@ -4,7 +4,19 @@ Behavioural analysis of whether/how Apex detects swing highs/lows or other marke
 
 ## Status
 
-🟠 HYPOTHESIS — not yet investigated.
+🟠 HYPOTHESIS — an unconfirmed visual lead exists, needs a proper zoomed frame-by-frame pass before it's worth more than a note.
+
+## ⚠️ Tentative, unconfirmed lead (needs closer follow-up before trusting it)
+
+Video frames (E-012) show small diamond-shaped markers appearing at some, but
+not all, local highs/lows on the M15 candlestick chart (e.g. near a peak
+around "15 Jan 12:30–13:15" and near a trough around "15 Jan 14:30" in one
+frame). These are plausibly chart objects Apex itself draws to mark detected
+swing points, but at the extracted resolution (1 frame/30s, 1280x720) this
+can't be distinguished with confidence from unrelated MT5 UI elements (order
+markers, crosshair, etc.). **Do not treat this as evidence yet** — it's a
+lead for a follow-up pass (re-extract frames at higher frequency/resolution
+and crop into the marker regions) before it gets a hypothesis number.
 
 ## Questions to Answer
 
@@ -27,4 +39,4 @@ _None logged yet — raise new ones in [Hypotheses.md](Hypotheses.md) tagged `Sw
 
 ## Evidence
 
-See [Evidence.md](Evidence.md) for the full index. Relevant IDs: _none indexed yet_.
+See [Evidence.md](Evidence.md) for the full index. Relevant IDs: E-012 (video, tentative lead only).

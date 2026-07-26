@@ -19,15 +19,15 @@ Batch added 2026-07-25 from `Apex_Investigation.zip` (Melvin's own MT5 Strategy 
 | E-009 | Preset | `data/presets/apex personal 25k.set` | n/a | n/a | "Zennbot" engine preset, `ZennbotPresetName=Apex personal 0`, MaxDrawdown 100% (off), AutoLotMultiplier=5 | H-003, H-004 |
 | E-010 | Preset | `data/presets/apex propfirm 25K.set` | n/a | n/a | `ZennbotPresetName=Apex prop-live 25000`, MaxDrawdown 4% / hard equity floor 22750, AutoLotMultiplier=1.25, RandomizedValues enabled | H-003, H-004 |
 | E-011 | Preset | `data/presets/ulltima_markets_personak_cent.set` | n/a | n/a | Cent-account variant, MaxDrawdown 30%, AutoLotMultiplier=8 | H-003, H-004 |
-| E-012 | Video | `data/videos/apex video.mp4` (Git LFS) | unknown | unknown | Not yet reviewed — needs a viewing pass and a note here on what it shows | — |
-| E-013 | Screenshot | `data/screenshots/instellling backtest.png` | n/a | n/a | Strategy Tester settings screenshot — not yet cross-checked against the presets | — |
-| E-014 | Report | `data/reports/repport ultima markets personal cent account.xlsx` | unknown | unknown | Not yet opened/parsed — likely a live/demo account statement for the Ultima Markets cent account | — |
+| E-012 | Video | `data/videos/apex video.mp4` (Git LFS) | chart dates shown: Jan 2026 | XAUUSD | Silent (-91dB) 6:30 screen recording, 1280x720, of MT5 Strategy Tester visual/replay mode running "Zennbot Apex v2.4". Shows simultaneous buy-stop + sell-stop pending orders at multiple price levels, each tagged with a `15743<N>` comment ID, plus per-position SL levels drawn on chart with $/% risk labels. | H-001, H-003 |
+| E-013 | Screenshot | `data/screenshots/instellling backtest.png` | config for a 2025.01.01–2026.01.01 single-year run | XAUUSD | Strategy Tester settings dialog: Expert = `ZennbotApex2.4.ex5`, M15, "Elke tick gebaseerd op echte ticks" (real-tick modeling), 25,000 EUR deposit, 1:500 leverage, "Willekeurige Vertraging" execution (maps to `BacktestRealism_*` preset fields), optimization disabled. | H-003 |
+| E-014 | Report | `data/reports/repport ultima markets personal cent account.xlsx` | 2025.06.19–2026.07.24 | GBPUSD.cent, EURUSD.cent, NZDUSD.cent, AUDUSD.cent, EURGBP.cent, USDCAD.cent, AUDCAD.cent, AUDNZD.cent (XAUUSD.cent: only 2 trades) | **Real-money live account statement** (not a backtest) — account 30064842, broker "MarketsVox (SC) Ltd", Hedge mode, 9647 trades. Overall win rate 52.86% (per-symbol 43.5–52.6%), Sharpe 0.09, every symbol net-profitable despite near-coin-flip win rates (avg win $29.11 vs avg loss -$22.02). Deal `Comment` field populated on only 11/19502 deals (vs near-universal in the XAUUSD backtests). No direct confirmation this account runs the exact "Apex" EA — inferred only from being bundled with the matching-named preset E-011. | H-005 |
 | E-015 | Journal | `data/journals/personal-2026-journal(backtestfalse).txt` | 2026.07.21 (backtest run logged 2026.07.25) | XAUUSD | MT5 Experts log, BacktestRealism-off run, 8191 lines | H-002 |
 | E-016 | Journal | `data/journals/personal-2026-journal(backtesttrue).txt` | 2026.07.21 (backtest run logged 2026.07.25) | XAUUSD | MT5 Experts log, BacktestRealism-on run, 10240 lines, 3740 stop-loss/take-profit/position-modified events | H-002 |
 
 _Add one row per evidence item. Never renumber or reuse an ID once assigned, even if the evidence is later found to be irrelevant — mark it "unused" rather than deleting the row, to keep citations in other docs valid._
 
-_Still open: E-012 (video), E-013 (screenshot), E-014 (xlsx report) haven't been reviewed yet — they need a pass before their "Summary"/"Cited in" columns mean anything._
+_E-012, E-013, E-014 reviewed 2026-07-25 — see updated rows above._
 
 ## Evidence Types
 

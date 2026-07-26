@@ -35,6 +35,17 @@ represent price levels, time-based slots, or something else — e.g. correlate
 each ID with its distribution of entry prices/times within a single trading
 day. Not yet logged in [Experiments.md](Experiments.md).
 
+**Update 2026-07-25 — third independent confirmation from video (E-012):**
+frames from the screen recording show the *same* `15743<N>` comment values
+live in the MT5 terminal's Trade tab, on both pending orders (`buy stop` /
+`sell stop`) and open positions simultaneously — e.g. one frame shows 5
+pending buy stops at once (comments 157437, 1574311, 157431, 157432, 157434,
+different prices/SL/TP each), and a later frame shows open positions tagged
+1574311/1574310/1574310. This confirms the grid places **both directions**
+(buy stop and sell stop) around price at the same time, not just one side —
+refines the "grid" reading of H-001 toward a two-sided straddle grid rather
+than a directional DCA ladder. Still 🟠 pending external review.
+
 ---
 
 ### H-002 — Apex trails its stop-loss progressively into profit rather than using a static SL
@@ -111,6 +122,19 @@ either generically (`Trading_`, `BacktestRealism_`, `Timezone_`,
 `.set` file with a wider parameter set, to test whether more `Apex_`-prefixed
 categories exist (e.g. `Apex_Grid_`, `Apex_TP_`, `Apex_Trail_`).
 
+**Update 2026-07-25 — two more independent confirmations of the naming
+itself (still 🟢 for the naming fact, interpretation stays 🟠):** the
+Strategy Tester settings screenshot (E-013) shows the Expert dropdown set to
+`ZennbotApex2.4.ex5` — the *compiled binary itself* carries the combined
+name, not just the preset text. The video (E-012) shows the same build's
+in-terminal overlay label reading "Zennbot Apex v2.4". Three independent
+sources (3 preset files, a settings dialog, a live terminal overlay) now
+agree on the exact same name/version, which is about as solid as internal
+(non-cross-reviewed) confirmation gets for a naming fact — but per the
+README's promotion rule this still needs ChatGPT/Grok agreement before any
+part of this moves to 🟡/🟢 as a *Finding*, not just a repeatedly-observed
+label.
+
 ---
 
 ### H-004 — Apex's propfirm preset trades meaningfully more conservatively than its personal-account preset
@@ -153,6 +177,75 @@ per-strategy/per-preset statistics are compared directly (not yet done).
 **Proposed test:** Not yet logged. Compare average lot size, average risk-per-trade
 (as % of balance), and max drawdown reached between personal and prop presets
 using `scripts/compare_backtests.py` across matched years.
+
+---
+
+### H-005 — The live "Ultima Markets cent" account shows materially different, weaker-edge behaviour than the XAUUSD backtests
+
+**Status:** 🟠 HYPOTHESIS — flagged as high-priority, this is the kind of "does the backtest hold up in reality" question the whole project exists to answer
+**Category:** Risk Manager / Portfolio Manager / Architecture
+**Raised:** 2026-07-25
+**Raised by:** Claude
+
+**Statement:** The trading behaviour recorded in the live "Ultima Markets
+personal cent" account (E-014) is meaningfully different from — and by one
+key risk-adjusted measure (Sharpe ratio), much weaker than — the behaviour
+seen in all 8 XAUUSD Strategy Tester backtests (E-001–E-008), to the point
+that these look like two different strategies/deployments rather than the
+same edge running on different accounts.
+
+**⚠️ Important caveat before the observations below:** there is **no direct
+confirmation** that this live account is running the "Apex"/"Zennbot" EA at
+all — no EA name, magic number, or version string appears anywhere in the
+xlsx export. The only link is that E-014 (the account statement) and E-011
+(a Zennbot preset named `ulltima_markets_personak_cent.set`) were provided
+together in the same evidence folder with matching names. Treat everything
+below as "what this account did," not yet as "what Apex does live."
+
+**Supporting observations:**
+- **Completely different symbol set.** The backtests (E-001–E-008) trade
+  XAUUSD exclusively. The live account trades 8 forex cent-pairs — GBPUSD
+  (2911 trades), EURUSD (2299), NZDUSD (1643), AUDUSD (1357), EURGBP (601),
+  USDCAD (530), AUDCAD (191), AUDNZD (104) — with XAUUSD.cent appearing only
+  **twice** in 9647 trades.
+- **Much lower, near-coin-flip win rate.** Overall 52.86% (5099 wins / 9647),
+  with per-symbol win rates ranging 43.5–52.6%. Every backtest, by contrast,
+  showed 77–86% win rate (see H-002 — driven by the trailed-SL mechanism).
+- **Different profit structure.** Average winning trade $29.11 vs average
+  losing trade -$22.02 — a classic "let winners run, cut losers" asymmetric
+  payoff profile. Every symbol is still net-profitable (total profit ranges
+  from $570 to $14,936 across pairs), but via trade-size asymmetry rather
+  than high win rate.
+- **Very low Sharpe ratio (0.09)** despite a high recovery factor (19.56) —
+  consistent with a choppy, high-variance equity curve that ended net
+  positive rather than a smooth one. Max balance drawdown 2.49% (absolute),
+  3.57% (relative).
+- **Comment/magic tagging is almost entirely absent**: only 11 of 19,502
+  deals in the Deals section have any `Comment` value at all (mostly
+  MT5-generated hedge-netting notes like `#5305835 by #5074422`, plus one
+  `[sl 4759.00]` — note the bracket format differs from the backtests'
+  unbracketed `sl 2062.52`). This is the opposite of the backtests, where
+  the grid-slot comment (H-001) is present on nearly every entry.
+
+**What this could mean (not yet distinguished — needs more evidence):**
+1. This is a different Zennbot/Apex configuration or an older/different EA
+   build that behaves fundamentally differently on forex majors vs. XAUUSD
+   (plausible: grid/DCA logic tuned for a ranging metal could behave very
+   differently on trending forex pairs).
+2. This isn't Apex at all — it could be an unrelated EA or manual/other-bot
+   trading on this account, and the shared filename is coincidental or just
+   organisational (same folder, unrelated content).
+3. This is genuinely the same "Apex" logic, and it reveals that real-world
+   multi-symbol performance diverges sharply from the curated XAUUSD
+   backtest results — which would be an important, cautionary finding for
+   anyone evaluating Apex's marketing claims.
+
+**Proposed test:** Not yet logged. First step should be confirming *whether*
+this account even runs Apex/Zennbot (ask Melvin directly, or look for
+supporting evidence — e.g. does an EA name appear in any other export for
+this account?). Only after that's settled does it make sense to design a
+same-symbol comparison (there are only 2 XAUUSD.cent trades here, too few to
+compare against E-001–E-008 directly).
 
 ## Disproven (🔴)
 

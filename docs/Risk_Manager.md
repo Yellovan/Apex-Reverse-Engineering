@@ -4,7 +4,7 @@ Behavioural analysis of Apex's position-sizing / risk-management logic.
 
 ## Status
 
-🟠 HYPOTHESIS — preset-level configuration differences found, see [H-004](Hypotheses.md#h-004-apexs-propfirm-preset-trades-meaningfully-more-conservatively-than-its-personal-account-preset). Realised-trade risk (actual lot sizes/exposure in the parsed trade data) not yet analysed.
+🟠 HYPOTHESIS overall (per README's promotion rule). Realised-trade risk has now been analysed — see [EXP-003](Experiments.md): personal-preset trades run 9–15x the average lot size of prop-preset trades across 2023–2025, and 8–12x the average risk-per-trade, a bigger gap than the 4x `AutoLotMultiplier` difference alone would predict.
 
 ## 🟢 Confirmed: exposed preset inputs (directly read from the .set files, not inferred)
 
@@ -38,8 +38,9 @@ _None yet._
 
 ## Hypotheses (🟠)
 
-- [H-004](Hypotheses.md#h-004-apexs-propfirm-preset-trades-meaningfully-more-conservatively-than-its-personal-account-preset) — propfirm preset is configured for materially lower risk (tighter drawdown limit, lower auto-lot multiplier, fixed reference balance for sizing, randomized values for anti-detection), but this hasn't yet been confirmed to show up as lower realised risk in the actual trade data.
+- [H-004](Hypotheses.md#h-004-apexs-propfirm-preset-trades-meaningfully-more-conservatively-than-its-personal-account-preset) — propfirm preset is configured for materially lower risk, and [EXP-003](Experiments.md) confirms this shows up in realised trade data too: avg lot 0.351/0.370/0.258 (personal, 2023/24/25) vs 0.040/0.033/0.024 (prop) — personal risks roughly 9–15x more per trade by lot size, 8–12x more by €-risk (`|entry-sl|×lot`). The gap exceeds the 4x `AutoLotMultiplier` difference alone, suggesting `OverrideBalance` or compounding effects amplify it further (untested which).
+- [H-005](Hypotheses.md#h-005-the-live-ultima-markets-cent-account-shows-materially-different-weaker-edge-behaviour-than-the-xauusd-backtests) — the live cent account (E-014) shows a completely different risk/reward profile (near-50% win rate, asymmetric win/loss size, Sharpe 0.09) from any of the XAUUSD backtests. Not confirmed to be the same EA — see caveat in the hypothesis.
 
 ## Evidence
 
-See [Evidence.md](Evidence.md) for the full index. Relevant IDs: E-009, E-010, E-011 (preset files), E-001 through E-008 (backtests to cross-check realised risk against).
+See [Evidence.md](Evidence.md) for the full index. Relevant IDs: E-009, E-010, E-011 (preset files), E-001 through E-008 (backtests, cross-checked in EXP-003), E-014 (live account, H-005).
