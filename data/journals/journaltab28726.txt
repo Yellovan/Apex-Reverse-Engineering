@@ -1,0 +1,255 @@
+2026.07.28 00:00:07.963	Trades	'31599933': buy stop 0.31 XAUUSD.sc at 4767.88 sl: 4696.28 tp: 4797.54
+2026.07.28 00:00:08.147	Trades	'31599933': failed buy stop 0.31 XAUUSD.sc at 4767.88 sl: 4696.28 tp: 4797.54 [Market closed]
+2026.07.28 00:00:08.148	Trades	'31599933': sell stop 0.31 XAUUSD.sc at 3962.93 sl: 4034.53 tp: 3933.27
+2026.07.28 00:00:08.332	Trades	'31599933': failed sell stop 0.31 XAUUSD.sc at 3962.93 sl: 4034.53 tp: 3933.27 [Market closed]
+2026.07.28 00:00:08.332	Trades	'31599933': buy stop 0.31 XAUUSD.sc at 4767.88 sl: 4696.28 tp: 4797.54
+2026.07.28 00:00:08.516	Trades	'31599933': failed buy stop 0.31 XAUUSD.sc at 4767.88 sl: 4696.28 tp: 4797.54 [Market closed]
+2026.07.28 00:00:08.517	Trades	'31599933': sell stop 0.31 XAUUSD.sc at 3962.93 sl: 4034.53 tp: 3933.27
+2026.07.28 00:00:08.702	Trades	'31599933': failed sell stop 0.31 XAUUSD.sc at 3962.93 sl: 4034.53 tp: 3933.27 [Market closed]
+2026.07.28 00:00:08.702	Trades	'31599933': buy stop 0.31 XAUUSD.sc at 4767.88 sl: 4696.28 tp: 4797.54
+2026.07.28 00:00:08.887	Trades	'31599933': failed buy stop 0.31 XAUUSD.sc at 4767.88 sl: 4696.28 tp: 4797.54 [Market closed]
+2026.07.28 00:00:08.887	Trades	'31599933': sell stop 0.31 XAUUSD.sc at 3962.93 sl: 4034.53 tp: 3933.27
+2026.07.28 00:00:09.071	Trades	'31599933': failed sell stop 0.31 XAUUSD.sc at 3962.93 sl: 4034.53 tp: 3933.27 [Market closed]
+2026.07.28 00:00:09.072	Trades	'31599933': buy stop 0.26 XAUUSD.sc at 4165.02 sl: 4144.56 tp: 4236.62
+2026.07.28 00:00:09.257	Trades	'31599933': failed buy stop 0.26 XAUUSD.sc at 4165.02 sl: 4144.56 tp: 4236.62 [Market closed]
+2026.07.28 00:00:09.257	Trades	'31599933': sell stop 0.26 XAUUSD.sc at 4024.58 sl: 4045.04 tp: 3952.98
+2026.07.28 00:00:09.441	Trades	'31599933': failed sell stop 0.26 XAUUSD.sc at 4024.58 sl: 4045.04 tp: 3952.98 [Market closed]
+2026.07.28 00:00:09.441	Trades	'31599933': buy stop 0.26 XAUUSD.sc at 4165.02 sl: 4144.56 tp: 4236.62
+2026.07.28 00:00:09.625	Trades	'31599933': failed buy stop 0.26 XAUUSD.sc at 4165.02 sl: 4144.56 tp: 4236.62 [Market closed]
+2026.07.28 00:00:09.626	Trades	'31599933': sell stop 0.26 XAUUSD.sc at 4024.58 sl: 4045.04 tp: 3952.98
+2026.07.28 00:00:09.809	Trades	'31599933': failed sell stop 0.26 XAUUSD.sc at 4024.58 sl: 4045.04 tp: 3952.98 [Market closed]
+2026.07.28 00:00:09.810	Trades	'31599933': buy stop 0.15 XAUUSD.sc at 4164.08 sl: 4070.32 tp: 4177.72
+2026.07.28 00:00:09.994	Trades	'31599933': failed buy stop 0.15 XAUUSD.sc at 4164.08 sl: 4070.32 tp: 4177.72 [Market closed]
+2026.07.28 00:00:09.995	Trades	'31599933': sell stop 0.15 XAUUSD.sc at 4024.49 sl: 4118.25 tp: 4010.85
+2026.07.28 00:00:10.179	Trades	'31599933': failed sell stop 0.15 XAUUSD.sc at 4024.49 sl: 4118.25 tp: 4010.85 [Market closed]
+2026.07.28 00:00:10.180	Trades	'31599933': buy stop 0.15 XAUUSD.sc at 4164.08 sl: 4070.32 tp: 4177.72
+2026.07.28 00:00:10.364	Trades	'31599933': failed buy stop 0.15 XAUUSD.sc at 4164.08 sl: 4070.32 tp: 4177.72 [Market closed]
+2026.07.28 00:00:10.365	Trades	'31599933': sell stop 0.15 XAUUSD.sc at 4024.49 sl: 4118.25 tp: 4010.85
+2026.07.28 00:00:10.549	Trades	'31599933': failed sell stop 0.15 XAUUSD.sc at 4024.49 sl: 4118.25 tp: 4010.85 [Market closed]
+2026.07.28 00:00:10.550	Trades	'31599933': buy stop 0.15 XAUUSD.sc at 4164.08 sl: 4070.32 tp: 4177.72
+2026.07.28 00:00:10.734	Trades	'31599933': failed buy stop 0.15 XAUUSD.sc at 4164.08 sl: 4070.32 tp: 4177.72 [Market closed]
+2026.07.28 00:00:10.734	Trades	'31599933': sell stop 0.15 XAUUSD.sc at 4024.49 sl: 4118.25 tp: 4010.85
+2026.07.28 00:00:10.918	Trades	'31599933': failed sell stop 0.15 XAUUSD.sc at 4024.49 sl: 4118.25 tp: 4010.85 [Market closed]
+2026.07.28 00:00:10.920	Trades	'31599933': buy stop 0.15 XAUUSD.sc at 4164.08 sl: 4070.32 tp: 4177.72
+2026.07.28 00:00:11.104	Trades	'31599933': failed buy stop 0.15 XAUUSD.sc at 4164.08 sl: 4070.32 tp: 4177.72 [Market closed]
+2026.07.28 00:00:11.104	Trades	'31599933': sell stop 0.15 XAUUSD.sc at 4024.49 sl: 4118.25 tp: 4010.85
+2026.07.28 00:00:11.288	Trades	'31599933': failed sell stop 0.15 XAUUSD.sc at 4024.49 sl: 4118.25 tp: 4010.85 [Market closed]
+2026.07.28 00:00:11.289	Trades	'31599933': buy stop 0.15 XAUUSD.sc at 4164.08 sl: 4070.32 tp: 4177.72
+2026.07.28 00:00:11.473	Trades	'31599933': failed buy stop 0.15 XAUUSD.sc at 4164.08 sl: 4070.32 tp: 4177.72 [Market closed]
+2026.07.28 00:00:11.474	Trades	'31599933': sell stop 0.15 XAUUSD.sc at 4024.49 sl: 4118.25 tp: 4010.85
+2026.07.28 00:00:11.658	Trades	'31599933': failed sell stop 0.15 XAUUSD.sc at 4024.49 sl: 4118.25 tp: 4010.85 [Market closed]
+2026.07.28 00:00:11.658	Trades	'31599933': buy stop 0.08 XAUUSD.sc at 4163.38 sl: 4149.06 tp: 4204.29
+2026.07.28 00:00:11.842	Trades	'31599933': failed buy stop 0.08 XAUUSD.sc at 4163.38 sl: 4149.06 tp: 4204.29 [Market closed]
+2026.07.28 00:00:11.842	Trades	'31599933': sell stop 0.08 XAUUSD.sc at 3962.11 sl: 3976.43 tp: 3921.20
+2026.07.28 00:00:12.028	Trades	'31599933': failed sell stop 0.08 XAUUSD.sc at 3962.11 sl: 3976.43 tp: 3921.20 [Market closed]
+2026.07.28 00:00:12.028	Trades	'31599933': buy stop 0.37 XAUUSD.sc at 4114.60 sl: 4059.52 tp: 4131.91
+2026.07.28 00:00:12.213	Trades	'31599933': failed buy stop 0.37 XAUUSD.sc at 4114.60 sl: 4059.52 tp: 4131.91 [Market closed]
+2026.07.28 00:00:12.213	Trades	'31599933': sell stop 0.37 XAUUSD.sc at 4023.59 sl: 4078.67 tp: 4006.28
+2026.07.28 00:00:12.397	Trades	'31599933': failed sell stop 0.37 XAUUSD.sc at 4023.59 sl: 4078.67 tp: 4006.28 [Market closed]
+2026.07.28 00:00:12.398	Trades	'31599933': buy stop 0.37 XAUUSD.sc at 4114.60 sl: 4059.52 tp: 4131.91
+2026.07.28 00:00:12.582	Trades	'31599933': failed buy stop 0.37 XAUUSD.sc at 4114.60 sl: 4059.52 tp: 4131.91 [Market closed]
+2026.07.28 00:00:12.583	Trades	'31599933': sell stop 0.37 XAUUSD.sc at 4023.59 sl: 4078.67 tp: 4006.28
+2026.07.28 00:00:12.767	Trades	'31599933': failed sell stop 0.37 XAUUSD.sc at 4023.59 sl: 4078.67 tp: 4006.28 [Market closed]
+2026.07.28 00:00:12.768	Trades	'31599933': buy stop 0.37 XAUUSD.sc at 4114.60 sl: 4059.52 tp: 4131.91
+2026.07.28 00:00:12.952	Trades	'31599933': failed buy stop 0.37 XAUUSD.sc at 4114.60 sl: 4059.52 tp: 4131.91 [Market closed]
+2026.07.28 00:00:12.953	Trades	'31599933': sell stop 0.37 XAUUSD.sc at 4023.59 sl: 4078.67 tp: 4006.28
+2026.07.28 00:00:13.137	Trades	'31599933': failed sell stop 0.37 XAUUSD.sc at 4023.59 sl: 4078.67 tp: 4006.28 [Market closed]
+2026.07.28 00:00:13.137	Trades	'31599933': buy stop 0.37 XAUUSD.sc at 4114.60 sl: 4059.52 tp: 4131.91
+2026.07.28 00:00:13.321	Trades	'31599933': failed buy stop 0.37 XAUUSD.sc at 4114.60 sl: 4059.52 tp: 4131.91 [Market closed]
+2026.07.28 00:00:13.322	Trades	'31599933': sell stop 0.37 XAUUSD.sc at 4023.59 sl: 4078.67 tp: 4006.28
+2026.07.28 00:00:13.506	Trades	'31599933': failed sell stop 0.37 XAUUSD.sc at 4023.59 sl: 4078.67 tp: 4006.28 [Market closed]
+2026.07.28 00:00:13.506	Trades	'31599933': buy stop 0.04 XAUUSD.sc at 4102.75 sl: 4018.77 tp: 4131.82
+2026.07.28 00:00:13.690	Trades	'31599933': failed buy stop 0.04 XAUUSD.sc at 4102.75 sl: 4018.77 tp: 4131.82 [Market closed]
+2026.07.28 00:00:13.690	Trades	'31599933': sell stop 0.04 XAUUSD.sc at 4068.48 sl: 4152.46 tp: 4039.41
+2026.07.28 00:00:13.874	Trades	'31599933': failed sell stop 0.04 XAUUSD.sc at 4068.48 sl: 4152.46 tp: 4039.41 [Market closed]
+2026.07.28 00:00:13.875	Trades	'31599933': buy stop 0.04 XAUUSD.sc at 4102.75 sl: 4018.77 tp: 4131.82
+2026.07.28 00:00:14.059	Trades	'31599933': failed buy stop 0.04 XAUUSD.sc at 4102.75 sl: 4018.77 tp: 4131.82 [Market closed]
+2026.07.28 00:00:14.059	Trades	'31599933': sell stop 0.04 XAUUSD.sc at 4068.48 sl: 4152.46 tp: 4039.41
+2026.07.28 00:00:14.243	Trades	'31599933': failed sell stop 0.04 XAUUSD.sc at 4068.48 sl: 4152.46 tp: 4039.41 [Market closed]
+2026.07.28 00:00:14.243	Trades	'31599933': buy stop 0.04 XAUUSD.sc at 4102.75 sl: 4018.77 tp: 4131.82
+2026.07.28 00:00:14.427	Trades	'31599933': failed buy stop 0.04 XAUUSD.sc at 4102.75 sl: 4018.77 tp: 4131.82 [Market closed]
+2026.07.28 00:00:14.427	Trades	'31599933': sell stop 0.04 XAUUSD.sc at 4068.48 sl: 4152.46 tp: 4039.41
+2026.07.28 00:00:14.612	Trades	'31599933': failed sell stop 0.04 XAUUSD.sc at 4068.48 sl: 4152.46 tp: 4039.41 [Market closed]
+2026.07.28 00:00:14.612	Trades	'31599933': buy stop 0.04 XAUUSD.sc at 4102.75 sl: 4018.77 tp: 4131.82
+2026.07.28 00:00:14.796	Trades	'31599933': failed buy stop 0.04 XAUUSD.sc at 4102.75 sl: 4018.77 tp: 4131.82 [Market closed]
+2026.07.28 00:00:14.797	Trades	'31599933': sell stop 0.04 XAUUSD.sc at 4068.48 sl: 4152.46 tp: 4039.41
+2026.07.28 00:00:14.981	Trades	'31599933': failed sell stop 0.04 XAUUSD.sc at 4068.48 sl: 4152.46 tp: 4039.41 [Market closed]
+2026.07.28 00:00:14.981	Trades	'31599933': buy stop 0.04 XAUUSD.sc at 4102.75 sl: 4018.77 tp: 4131.82
+2026.07.28 00:00:15.165	Trades	'31599933': failed buy stop 0.04 XAUUSD.sc at 4102.75 sl: 4018.77 tp: 4131.82 [Market closed]
+2026.07.28 00:00:15.165	Trades	'31599933': sell stop 0.04 XAUUSD.sc at 4068.48 sl: 4152.46 tp: 4039.41
+2026.07.28 00:00:15.349	Trades	'31599933': failed sell stop 0.04 XAUUSD.sc at 4068.48 sl: 4152.46 tp: 4039.41 [Market closed]
+2026.07.28 00:00:15.350	Trades	'31599933': buy stop 0.21 XAUUSD.sc at 4104.41 sl: 4069.79 tp: 4121.72
+2026.07.28 00:00:15.534	Trades	'31599933': failed buy stop 0.21 XAUUSD.sc at 4104.41 sl: 4069.79 tp: 4121.72 [Market closed]
+2026.07.28 00:00:15.535	Trades	'31599933': sell stop 0.21 XAUUSD.sc at 4066.93 sl: 4101.55 tp: 4049.62
+2026.07.28 00:00:15.719	Trades	'31599933': failed sell stop 0.21 XAUUSD.sc at 4066.93 sl: 4101.55 tp: 4049.62 [Market closed]
+2026.07.28 00:00:15.720	Trades	'31599933': buy stop 0.21 XAUUSD.sc at 4104.41 sl: 4069.79 tp: 4121.72
+2026.07.28 00:00:15.908	Trades	'31599933': failed buy stop 0.21 XAUUSD.sc at 4104.41 sl: 4069.79 tp: 4121.72 [Market closed]
+2026.07.28 00:00:15.908	Trades	'31599933': sell stop 0.21 XAUUSD.sc at 4066.93 sl: 4101.55 tp: 4049.62
+2026.07.28 00:00:16.093	Trades	'31599933': failed sell stop 0.21 XAUUSD.sc at 4066.93 sl: 4101.55 tp: 4049.62 [Market closed]
+2026.07.28 00:00:16.093	Trades	'31599933': buy stop 0.21 XAUUSD.sc at 4104.41 sl: 4069.79 tp: 4121.72
+2026.07.28 00:00:16.278	Trades	'31599933': failed buy stop 0.21 XAUUSD.sc at 4104.41 sl: 4069.79 tp: 4121.72 [Market closed]
+2026.07.28 00:00:16.278	Trades	'31599933': sell stop 0.21 XAUUSD.sc at 4066.93 sl: 4101.55 tp: 4049.62
+2026.07.28 00:00:16.462	Trades	'31599933': failed sell stop 0.21 XAUUSD.sc at 4066.93 sl: 4101.55 tp: 4049.62 [Market closed]
+2026.07.28 00:00:16.462	Trades	'31599933': buy stop 0.21 XAUUSD.sc at 4104.41 sl: 4069.79 tp: 4121.72
+2026.07.28 00:00:16.646	Trades	'31599933': failed buy stop 0.21 XAUUSD.sc at 4104.41 sl: 4069.79 tp: 4121.72 [Market closed]
+2026.07.28 00:00:16.647	Trades	'31599933': sell stop 0.21 XAUUSD.sc at 4066.93 sl: 4101.55 tp: 4049.62
+2026.07.28 00:00:16.830	Trades	'31599933': failed sell stop 0.21 XAUUSD.sc at 4066.93 sl: 4101.55 tp: 4049.62 [Market closed]
+2026.07.28 00:05:00.212	Trades	'31599933': buy stop 0.15 XAUUSD.sc at 4164.08 sl: 4070.32 tp: 4177.72
+2026.07.28 00:05:00.405	Trades	'31599933': accepted buy stop 0.15 XAUUSD.sc at 4164.08 sl: 4070.32 tp: 4177.72
+2026.07.28 00:05:00.405	Trades	'31599933': order #380065241 buy stop 0.15 / 0.15 XAUUSD.sc at 4164.08 done in 192.706 ms
+2026.07.28 00:05:00.405	Trades	'31599933': sell stop 0.15 XAUUSD.sc at 4024.49 sl: 4118.25 tp: 4010.85
+2026.07.28 00:05:00.594	Trades	'31599933': accepted sell stop 0.15 XAUUSD.sc at 4024.49 sl: 4118.25 tp: 4010.85
+2026.07.28 00:05:00.595	Trades	'31599933': order #380065270 sell stop 0.15 / 0.15 XAUUSD.sc at 4024.49 done in 190.012 ms
+2026.07.28 00:05:00.608	Trades	'31599933': buy stop 0.04 XAUUSD.sc at 4102.75 sl: 4018.77 tp: 4131.82
+2026.07.28 00:05:00.799	Trades	'31599933': accepted buy stop 0.04 XAUUSD.sc at 4102.75 sl: 4018.77 tp: 4131.82
+2026.07.28 00:05:00.800	Trades	'31599933': order #380065277 buy stop 0.04 / 0.04 XAUUSD.sc at 4102.75 done in 191.625 ms
+2026.07.28 00:05:00.800	Trades	'31599933': sell stop 0.04 XAUUSD.sc at 4068.48 sl: 4152.46 tp: 4039.41
+2026.07.28 00:05:00.984	Trades	'31599933': accepted sell stop 0.04 XAUUSD.sc at 4068.48 sl: 4152.46 tp: 4039.41
+2026.07.28 00:05:00.985	Trades	'31599933': order #380065282 sell stop 0.04 / 0.04 XAUUSD.sc at 4068.48 done in 185.645 ms
+2026.07.28 00:05:00.986	Trades	'31599933': buy stop 0.21 XAUUSD.sc at 4104.41 sl: 4069.79 tp: 4121.72
+2026.07.28 00:05:01.172	Trades	'31599933': accepted buy stop 0.21 XAUUSD.sc at 4104.41 sl: 4069.79 tp: 4121.72
+2026.07.28 00:05:01.172	Trades	'31599933': order #380065286 buy stop 0.21 / 0.21 XAUUSD.sc at 4104.41 done in 186.055 ms
+2026.07.28 00:05:01.173	Trades	'31599933': sell stop 0.21 XAUUSD.sc at 4066.93 sl: 4101.55 tp: 4049.62
+2026.07.28 00:05:01.357	Trades	'31599933': accepted sell stop 0.21 XAUUSD.sc at 4066.93 sl: 4101.55 tp: 4049.62
+2026.07.28 00:05:01.358	Trades	'31599933': order #380065289 sell stop 0.21 / 0.21 XAUUSD.sc at 4066.93 done in 185.580 ms
+2026.07.28 00:05:35.528	Network	'31599933': scanning network for access points
+2026.07.28 00:06:00.698	Network	'31599933': scanning network finished
+2026.07.28 00:15:00.267	Trades	'31599933': buy stop 0.12 XAUUSD.sc at 4114.28 sl: 4030.88 tp: 4128.44
+2026.07.28 00:15:00.451	Trades	'31599933': accepted buy stop 0.12 XAUUSD.sc at 4114.28 sl: 4030.88 tp: 4128.44
+2026.07.28 00:15:00.452	Trades	'31599933': order #380069233 buy stop 0.12 / 0.12 XAUUSD.sc at 4114.28 done in 185.291 ms
+2026.07.28 00:15:00.453	Trades	'31599933': sell stop 0.12 XAUUSD.sc at 4023.75 sl: 4107.15 tp: 4009.59
+2026.07.28 00:15:00.637	Trades	'31599933': accepted sell stop 0.12 XAUUSD.sc at 4023.75 sl: 4107.15 tp: 4009.59
+2026.07.28 00:15:00.637	Trades	'31599933': order #380069266 sell stop 0.12 / 0.12 XAUUSD.sc at 4023.75 done in 185.052 ms
+2026.07.28 00:15:00.641	Trades	'31599933': buy stop 0.41 XAUUSD.sc at 4114.12 sl: 4086.36 tp: 4131.65
+2026.07.28 00:15:00.826	Trades	'31599933': accepted buy stop 0.41 XAUUSD.sc at 4114.12 sl: 4086.36 tp: 4131.65
+2026.07.28 00:15:00.827	Trades	'31599933': order #380069277 buy stop 0.41 / 0.41 XAUUSD.sc at 4114.12 done in 186.151 ms
+2026.07.28 00:15:00.828	Trades	'31599933': sell stop 0.41 XAUUSD.sc at 4024.50 sl: 4052.26 tp: 4006.97
+2026.07.28 00:15:01.014	Trades	'31599933': accepted sell stop 0.41 XAUUSD.sc at 4024.50 sl: 4052.26 tp: 4006.97
+2026.07.28 00:15:01.014	Trades	'31599933': order #380069296 sell stop 0.41 / 0.41 XAUUSD.sc at 4024.50 done in 185.837 ms
+2026.07.28 00:15:01.022	Trades	'31599933': buy stop 0.41 XAUUSD.sc at 4165.10 sl: 4129.69 tp: 4187.92
+2026.07.28 00:15:01.219	Trades	'31599933': accepted buy stop 0.41 XAUUSD.sc at 4165.10 sl: 4129.69 tp: 4187.92
+2026.07.28 00:15:01.220	Trades	'31599933': order #380069302 buy stop 0.41 / 0.41 XAUUSD.sc at 4165.10 done in 197.775 ms
+2026.07.28 00:15:01.220	Trades	'31599933': sell stop 0.41 XAUUSD.sc at 4024.30 sl: 4059.71 tp: 4001.48
+2026.07.28 00:15:01.412	Trades	'31599933': accepted sell stop 0.41 XAUUSD.sc at 4024.30 sl: 4059.71 tp: 4001.48
+2026.07.28 00:15:01.413	Trades	'31599933': order #380069308 sell stop 0.41 / 0.41 XAUUSD.sc at 4024.30 done in 193.049 ms
+2026.07.28 00:15:01.425	Trades	'31599933': buy stop 0.31 XAUUSD.sc at 4767.88 sl: 4696.28 tp: 4797.54
+2026.07.28 00:15:01.609	Trades	'31599933': accepted buy stop 0.31 XAUUSD.sc at 4767.88 sl: 4696.28 tp: 4797.54
+2026.07.28 00:15:01.610	Trades	'31599933': order #380069311 buy stop 0.31 / 0.31 XAUUSD.sc at 4767.88 done in 185.448 ms
+2026.07.28 00:15:01.610	Trades	'31599933': sell stop 0.31 XAUUSD.sc at 3962.93 sl: 4034.53 tp: 3933.27
+2026.07.28 00:15:01.795	Trades	'31599933': accepted sell stop 0.31 XAUUSD.sc at 3962.93 sl: 4034.53 tp: 3933.27
+2026.07.28 00:15:01.796	Trades	'31599933': order #380069314 sell stop 0.31 / 0.31 XAUUSD.sc at 3962.93 done in 185.941 ms
+2026.07.28 00:15:01.826	Trades	'31599933': buy stop 0.37 XAUUSD.sc at 4114.60 sl: 4059.52 tp: 4131.91
+2026.07.28 00:15:02.012	Trades	'31599933': accepted buy stop 0.37 XAUUSD.sc at 4114.60 sl: 4059.52 tp: 4131.91
+2026.07.28 00:15:02.012	Trades	'31599933': order #380069317 buy stop 0.37 / 0.37 XAUUSD.sc at 4114.60 done in 185.714 ms
+2026.07.28 00:15:02.013	Trades	'31599933': sell stop 0.37 XAUUSD.sc at 4023.59 sl: 4078.67 tp: 4006.28
+2026.07.28 00:15:02.197	Trades	'31599933': accepted sell stop 0.37 XAUUSD.sc at 4023.59 sl: 4078.67 tp: 4006.28
+2026.07.28 00:15:02.198	Trades	'31599933': order #380069321 sell stop 0.37 / 0.37 XAUUSD.sc at 4023.59 done in 185.155 ms
+2026.07.28 01:00:00.195	Trades	'31599933': buy stop 0.51 XAUUSD.sc at 4886.29 sl: 4835.15 tp: 4923.11
+2026.07.28 01:00:00.383	Trades	'31599933': accepted buy stop 0.51 XAUUSD.sc at 4886.29 sl: 4835.15 tp: 4923.11
+2026.07.28 01:00:00.384	Trades	'31599933': order #380092887 buy stop 0.51 / 0.51 XAUUSD.sc at 4886.29 done in 188.497 ms
+2026.07.28 01:00:00.384	Trades	'31599933': sell stop 0.51 XAUUSD.sc at 3945.20 sl: 3996.34 tp: 3908.38
+2026.07.28 01:00:00.569	Trades	'31599933': accepted sell stop 0.51 XAUUSD.sc at 3945.20 sl: 3996.34 tp: 3908.38
+2026.07.28 01:00:00.569	Trades	'31599933': order #380092923 sell stop 0.51 / 0.51 XAUUSD.sc at 3945.20 done in 185.160 ms
+2026.07.28 01:00:00.581	Trades	'31599933': buy stop 0.43 XAUUSD.sc at 4162.56 sl: 4142.10 tp: 4246.43
+2026.07.28 01:00:00.766	Trades	'31599933': accepted buy stop 0.43 XAUUSD.sc at 4162.56 sl: 4142.10 tp: 4246.43
+2026.07.28 01:00:00.767	Trades	'31599933': order #380092954 buy stop 0.43 / 0.43 XAUUSD.sc at 4162.56 done in 185.527 ms
+2026.07.28 01:00:00.767	Trades	'31599933': sell stop 0.43 XAUUSD.sc at 3961.09 sl: 3981.55 tp: 3877.22
+2026.07.28 01:00:00.952	Trades	'31599933': accepted sell stop 0.43 XAUUSD.sc at 3961.09 sl: 3981.55 tp: 3877.22
+2026.07.28 01:00:00.952	Trades	'31599933': order #380092988 sell stop 0.43 / 0.43 XAUUSD.sc at 3961.09 done in 185.352 ms
+2026.07.28 01:00:00.991	Trades	'31599933': buy stop 0.26 XAUUSD.sc at 4165.02 sl: 4144.56 tp: 4236.62
+2026.07.28 01:00:01.175	Trades	'31599933': accepted buy stop 0.26 XAUUSD.sc at 4165.02 sl: 4144.56 tp: 4236.62
+2026.07.28 01:00:01.176	Trades	'31599933': order #380093029 buy stop 0.26 / 0.26 XAUUSD.sc at 4165.02 done in 185.274 ms
+2026.07.28 01:00:01.176	Trades	'31599933': sell stop 0.26 XAUUSD.sc at 4024.58 sl: 4045.04 tp: 3952.98
+2026.07.28 01:00:01.394	Trades	'31599933': accepted sell stop 0.26 XAUUSD.sc at 4024.58 sl: 4045.04 tp: 3952.98
+2026.07.28 01:00:01.412	Trades	'31599933': order #380093045 sell stop 0.26 / 0.26 XAUUSD.sc at 4024.58 done in 236.476 ms
+2026.07.28 01:00:01.427	Trades	'31599933': buy stop 0.08 XAUUSD.sc at 4163.38 sl: 4149.06 tp: 4204.29
+2026.07.28 01:00:01.612	Trades	'31599933': accepted buy stop 0.08 XAUUSD.sc at 4163.38 sl: 4149.06 tp: 4204.29
+2026.07.28 01:00:01.613	Trades	'31599933': order #380093079 buy stop 0.08 / 0.08 XAUUSD.sc at 4163.38 done in 185.588 ms
+2026.07.28 01:00:01.613	Trades	'31599933': sell stop 0.08 XAUUSD.sc at 3962.11 sl: 3976.43 tp: 3921.20
+2026.07.28 01:00:01.798	Trades	'31599933': accepted sell stop 0.08 XAUUSD.sc at 3962.11 sl: 3976.43 tp: 3921.20
+2026.07.28 01:00:01.799	Trades	'31599933': order #380093104 sell stop 0.08 / 0.08 XAUUSD.sc at 3962.11 done in 186.248 ms
+2026.07.28 02:00:00.227	Trades	'31599933': sell stop 0.37 XAUUSD.sc at 4066.93 sl: 4122.01 tp: 4049.62
+2026.07.28 02:00:00.413	Trades	'31599933': accepted sell stop 0.37 XAUUSD.sc at 4066.93 sl: 4122.01 tp: 4049.62
+2026.07.28 02:00:00.415	Trades	'31599933': order #380121325 sell stop 0.37 / 0.37 XAUUSD.sc at 4066.93 done in 188.472 ms
+2026.07.28 02:04:58.222	Trades	'31599933': deal #342473399 sell 0.04 XAUUSD.sc at 4068.27 done (based on order #380065282)
+2026.07.28 02:05:00.208	Trades	'31599933': modify #380065282 sell 0.04 XAUUSD.sc sl: 4152.46, tp: 4039.41 -> sl: 4104.75, tp: 4039.41
+2026.07.28 02:05:00.396	Trades	'31599933': accepted modify #380065282 sell 0.04 XAUUSD.sc sl: 4152.46, tp: 4039.41 -> sl: 4104.75, tp: 4039.41
+2026.07.28 02:05:00.589	Trades	'31599933': deal #342474933 sell 0.21 XAUUSD.sc at 4065.71 done (based on order #380065289)
+2026.07.28 02:05:00.597	Trades	'31599933': deal #342474965 sell 0.37 XAUUSD.sc at 4065.72 done (based on order #380121325)
+2026.07.28 02:05:00.690	Trades	'31599933': modify #380065282 sell 0.04 XAUUSD.sc -> sl: 4104.75, tp: 4039.41 done in 482.038 ms
+2026.07.28 02:05:00.691	Trades	'31599933': modify #380065289 sell 0.21 XAUUSD.sc sl: 4101.55, tp: 4049.62 -> sl: 4100.53, tp: 4049.62
+2026.07.28 02:05:00.876	Trades	'31599933': accepted modify #380065289 sell 0.21 XAUUSD.sc sl: 4101.55, tp: 4049.62 -> sl: 4100.53, tp: 4049.62
+2026.07.28 02:05:00.935	Trades	'31599933': modify #380065289 sell 0.21 XAUUSD.sc -> sl: 4100.53, tp: 4049.62 done in 244.210 ms
+2026.07.28 02:05:00.940	Trades	'31599933': sell stop 0.21 XAUUSD.sc at 4050.78 sl: 4085.40 tp: 4033.47
+2026.07.28 02:05:01.127	Trades	'31599933': accepted sell stop 0.21 XAUUSD.sc at 4050.78 sl: 4085.40 tp: 4033.47
+2026.07.28 02:05:01.209	Trades	'31599933': order #380135957 sell stop 0.21 / 0.21 XAUUSD.sc at 4050.78 done in 269.216 ms
+2026.07.28 02:05:01.217	Trades	'31599933': sell stop 0.04 XAUUSD.sc at 4052.33 sl: 4136.31 tp: 4023.26
+2026.07.28 02:05:01.410	Trades	'31599933': accepted sell stop 0.04 XAUUSD.sc at 4052.33 sl: 4136.31 tp: 4023.26
+2026.07.28 02:05:01.475	Trades	'31599933': order #380136279 sell stop 0.04 / 0.04 XAUUSD.sc at 4052.33 done in 257.986 ms
+2026.07.28 02:06:00.148	Trades	'31599933': modify #380121325 sell 0.37 XAUUSD.sc sl: 4122.01, tp: 4049.62 -> sl: 4121.00, tp: 4049.62
+2026.07.28 02:06:00.344	Trades	'31599933': accepted modify #380121325 sell 0.37 XAUUSD.sc sl: 4122.01, tp: 4049.62 -> sl: 4121.00, tp: 4049.62
+2026.07.28 02:06:00.345	Trades	'31599933': modify #380121325 sell 0.37 XAUUSD.sc -> sl: 4121.00, tp: 4049.62 done in 197.182 ms
+2026.07.28 02:06:00.345	Trades	'31599933': modify #380065282 sell 0.04 XAUUSD.sc sl: 4104.75, tp: 4039.41 -> sl: 4067.19, tp: 4039.41
+2026.07.28 02:06:00.529	Trades	'31599933': accepted modify #380065282 sell 0.04 XAUUSD.sc sl: 4104.75, tp: 4039.41 -> sl: 4067.19, tp: 4039.41
+2026.07.28 02:06:00.530	Trades	'31599933': modify #380065282 sell 0.04 XAUUSD.sc -> sl: 4067.19, tp: 4039.41 done in 184.813 ms
+2026.07.28 02:08:44.684	Trades	'31599933': deal #342492480 buy 0.04 XAUUSD.sc at 4067.17 done (based on order #380152670)
+2026.07.28 02:17:00.187	Trades	'31599933': modify #380065289 sell 0.21 XAUUSD.sc sl: 4100.53, tp: 4049.62 -> sl: 4064.92, tp: 4049.62
+2026.07.28 02:17:00.371	Trades	'31599933': accepted modify #380065289 sell 0.21 XAUUSD.sc sl: 4100.53, tp: 4049.62 -> sl: 4064.92, tp: 4049.62
+2026.07.28 02:17:00.371	Trades	'31599933': modify #380065289 sell 0.21 XAUUSD.sc -> sl: 4064.92, tp: 4049.62 done in 184.828 ms
+2026.07.28 02:17:23.187	Trades	'31599933': deal #342507648 buy 0.21 XAUUSD.sc at 4064.86 done (based on order #380168761)
+2026.07.28 02:24:00.150	Trades	'31599933': modify #380121325 sell 0.37 XAUUSD.sc sl: 4121.00, tp: 4049.62 -> sl: 4062.79, tp: 4049.62
+2026.07.28 02:24:00.334	Trades	'31599933': accepted modify #380121325 sell 0.37 XAUUSD.sc sl: 4121.00, tp: 4049.62 -> sl: 4062.79, tp: 4049.62
+2026.07.28 02:24:00.334	Trades	'31599933': modify #380121325 sell 0.37 XAUUSD.sc -> sl: 4062.79, tp: 4049.62 done in 184.641 ms
+2026.07.28 02:25:00.235	Trades	'31599933': modify #380121325 sell 0.37 XAUUSD.sc sl: 4062.79, tp: 4049.62 -> sl: 4062.06, tp: 4049.62
+2026.07.28 02:25:00.420	Trades	'31599933': accepted modify #380121325 sell 0.37 XAUUSD.sc sl: 4062.79, tp: 4049.62 -> sl: 4062.06, tp: 4049.62
+2026.07.28 02:25:00.421	Trades	'31599933': modify #380121325 sell 0.37 XAUUSD.sc -> sl: 4062.06, tp: 4049.62 done in 185.830 ms
+2026.07.28 02:25:45.614	Trades	'31599933': deal #342521927 buy 0.37 XAUUSD.sc at 4062.06 done (based on order #380184227)
+2026.07.28 03:00:00.229	Trades	'31599933': buy stop 0.41 XAUUSD.sc at 4115.23 sl: 4079.82 tp: 4138.05
+2026.07.28 03:00:00.444	Trades	'31599933': accepted buy stop 0.41 XAUUSD.sc at 4115.23 sl: 4079.82 tp: 4138.05
+2026.07.28 03:00:00.444	Trades	'31599933': order #380245271 buy stop 0.41 / 0.41 XAUUSD.sc at 4115.23 done in 215.610 ms
+2026.07.28 03:20:32.929	Trades	'31599933': deal #342655834 sell 0.04 XAUUSD.sc at 4052.34 done (based on order #380136279)
+2026.07.28 03:21:00.111	Trades	'31599933': modify #380136279 sell 0.04 XAUUSD.sc sl: 4136.31, tp: 4023.26 -> sl: 4104.76, tp: 4023.26
+2026.07.28 03:21:00.295	Trades	'31599933': accepted modify #380136279 sell 0.04 XAUUSD.sc sl: 4136.31, tp: 4023.26 -> sl: 4104.76, tp: 4023.26
+2026.07.28 03:21:00.295	Trades	'31599933': modify #380136279 sell 0.04 XAUUSD.sc -> sl: 4104.76, tp: 4023.26 done in 184.403 ms
+2026.07.28 03:21:08.516	Trades	'31599933': deal #342660603 sell 0.21 XAUUSD.sc at 4050.29 done (based on order #380135957)
+2026.07.28 03:22:00.110	Trades	'31599933': modify #380135957 sell 0.21 XAUUSD.sc sl: 4085.40, tp: 4033.47 -> sl: 4085.11, tp: 4033.47
+2026.07.28 03:22:00.293	Trades	'31599933': accepted modify #380135957 sell 0.21 XAUUSD.sc sl: 4085.40, tp: 4033.47 -> sl: 4085.11, tp: 4033.47
+2026.07.28 03:22:00.313	Trades	'31599933': modify #380135957 sell 0.21 XAUUSD.sc -> sl: 4085.11, tp: 4033.47 done in 203.124 ms
+2026.07.28 03:25:00.118	Trades	'31599933': sell stop 0.04 XAUUSD.sc at 4047.80 sl: 4131.78 tp: 4018.73
+2026.07.28 03:25:00.308	Trades	'31599933': accepted sell stop 0.04 XAUUSD.sc at 4047.80 sl: 4131.78 tp: 4018.73
+2026.07.28 03:25:00.308	Trades	'31599933': order #380343323 sell stop 0.04 / 0.04 XAUUSD.sc at 4047.80 done in 190.328 ms
+2026.07.28 03:25:00.312	Trades	'31599933': sell stop 0.21 XAUUSD.sc at 4046.25 sl: 4080.87 tp: 4028.94
+2026.07.28 03:25:00.496	Trades	'31599933': accepted sell stop 0.21 XAUUSD.sc at 4046.25 sl: 4080.87 tp: 4028.94
+2026.07.28 03:25:00.497	Trades	'31599933': order #380343345 sell stop 0.21 / 0.21 XAUUSD.sc at 4046.25 done in 184.905 ms
+2026.07.28 03:26:32.568	Trades	'31599933': deal #342680369 sell 0.04 XAUUSD.sc at 4047.87 done (based on order #380343323)
+2026.07.28 03:27:00.127	Trades	'31599933': modify #380136279 sell 0.04 XAUUSD.sc sl: 4104.76, tp: 4023.26 -> sl: 4051.26, tp: 4023.26
+2026.07.28 03:27:00.310	Trades	'31599933': accepted modify #380136279 sell 0.04 XAUUSD.sc sl: 4104.76, tp: 4023.26 -> sl: 4051.26, tp: 4023.26
+2026.07.28 03:27:00.311	Trades	'31599933': modify #380136279 sell 0.04 XAUUSD.sc -> sl: 4051.26, tp: 4023.26 done in 184.497 ms
+2026.07.28 03:27:00.311	Trades	'31599933': modify #380343323 sell 0.04 XAUUSD.sc sl: 4131.78, tp: 4018.73 -> sl: 4104.75, tp: 4018.73
+2026.07.28 03:27:00.496	Trades	'31599933': accepted modify #380343323 sell 0.04 XAUUSD.sc sl: 4131.78, tp: 4018.73 -> sl: 4104.75, tp: 4018.73
+2026.07.28 03:27:00.497	Trades	'31599933': modify #380343323 sell 0.04 XAUUSD.sc -> sl: 4104.75, tp: 4018.73 done in 185.413 ms
+2026.07.28 03:30:00.224	Trades	'31599933': modify #380135957 sell 0.21 XAUUSD.sc sl: 4085.11, tp: 4033.47 -> sl: 4049.50, tp: 4033.47
+2026.07.28 03:30:00.408	Trades	'31599933': accepted modify #380135957 sell 0.21 XAUUSD.sc sl: 4085.11, tp: 4033.47 -> sl: 4049.50, tp: 4033.47
+2026.07.28 03:30:00.409	Trades	'31599933': modify #380135957 sell 0.21 XAUUSD.sc -> sl: 4049.50, tp: 4033.47 done in 185.385 ms
+2026.07.28 03:30:10.207	Trades	'31599933': deal #342692586 buy 0.21 XAUUSD.sc at 4049.55 done (based on order #380363061)
+2026.07.28 03:33:49.237	Trades	'31599933': deal #342699580 sell 0.21 XAUUSD.sc at 4045.94 done (based on order #380343345)
+2026.07.28 03:34:00.165	Trades	'31599933': modify #380343345 sell 0.21 XAUUSD.sc sl: 4080.87, tp: 4028.94 -> sl: 4080.76, tp: 4028.94
+2026.07.28 03:34:00.349	Trades	'31599933': accepted modify #380343345 sell 0.21 XAUUSD.sc sl: 4080.87, tp: 4028.94 -> sl: 4080.76, tp: 4028.94
+2026.07.28 03:34:00.350	Trades	'31599933': modify #380343345 sell 0.21 XAUUSD.sc -> sl: 4080.76, tp: 4028.94 done in 184.744 ms
+2026.07.28 03:35:00.136	Trades	'31599933': sell stop 0.04 XAUUSD.sc at 4025.14 sl: 4109.12 tp: 3996.07
+2026.07.28 03:35:00.320	Trades	'31599933': accepted sell stop 0.04 XAUUSD.sc at 4025.14 sl: 4109.12 tp: 3996.07
+2026.07.28 03:35:00.322	Trades	'31599933': order #380382563 sell stop 0.04 / 0.04 XAUUSD.sc at 4025.14 done in 186.556 ms
+2026.07.28 03:35:00.331	Trades	'31599933': sell stop 0.21 XAUUSD.sc at 4023.59 sl: 4058.21 tp: 4006.28
+2026.07.28 03:35:00.515	Trades	'31599933': accepted sell stop 0.21 XAUUSD.sc at 4023.59 sl: 4058.21 tp: 4006.28
+2026.07.28 03:35:00.516	Trades	'31599933': order #380382575 sell stop 0.21 / 0.21 XAUUSD.sc at 4023.59 done in 186.958 ms
+2026.07.28 03:52:00.117	Trades	'31599933': modify #380343323 sell 0.04 XAUUSD.sc sl: 4104.75, tp: 4018.73 -> sl: 4046.79, tp: 4018.73
+2026.07.28 03:52:00.302	Trades	'31599933': accepted modify #380343323 sell 0.04 XAUUSD.sc sl: 4104.75, tp: 4018.73 -> sl: 4046.79, tp: 4018.73
+2026.07.28 03:52:00.304	Trades	'31599933': modify #380343323 sell 0.04 XAUUSD.sc -> sl: 4046.79, tp: 4018.73 done in 191.393 ms
+2026.07.28 04:00:00.164	Trades	'31599933': buy stop 0.16 XAUUSD.sc at 4114.21 sl: 4020.45 tp: 4127.85
+2026.07.28 04:00:00.359	Trades	'31599933': accepted buy stop 0.16 XAUUSD.sc at 4114.21 sl: 4020.45 tp: 4127.85
+2026.07.28 04:00:00.382	Trades	'31599933': order #380439677 buy stop 0.16 / 0.16 XAUUSD.sc at 4114.21 done in 218.279 ms
+2026.07.28 04:04:00.151	Trades	'31599933': modify #380343345 sell 0.21 XAUUSD.sc sl: 4080.76, tp: 4028.94 -> sl: 4045.15, tp: 4028.94
+2026.07.28 04:04:00.345	Trades	'31599933': accepted modify #380343345 sell 0.21 XAUUSD.sc sl: 4080.76, tp: 4028.94 -> sl: 4045.15, tp: 4028.94
+2026.07.28 04:04:00.346	Trades	'31599933': modify #380343345 sell 0.21 XAUUSD.sc -> sl: 4045.15, tp: 4028.94 done in 194.764 ms
+2026.07.28 04:08:51.594	Trades	'31599933': deal #342776691 buy 0.21 XAUUSD.sc at 4045.16 done (based on order #380454479)
+2026.07.28 04:09:51.548	Trades	'31599933': deal #342780379 buy 0.04 XAUUSD.sc at 4047.02 done (based on order #380459107)
