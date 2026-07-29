@@ -49,9 +49,11 @@ def _to_iso(value: str) -> str | None:
 
 def _parse_exit_comment(comment: str) -> tuple[str | None, float | None]:
     """MT5 stamps the closing deal's comment with the reason and triggered
-    price, e.g. 'tp 1838.47' or 'sl 2062.52' — this is observed evidence of
-    which level was hit, not an inference, so it's safe to lift directly."""
-    match = re.match(r"^(tp|sl)\s+([\d.]+)$", comment.strip(), re.IGNORECASE)
+    price, e.g. 'tp 1838.47' / 'sl 2062.52' (Strategy Tester reports) or
+    '[tp 1838.47]' / '[sl 2062.52]' (live account "Trade History Report"
+    exports, e.g. E-019) — this is observed evidence of which level was hit,
+    not an inference, so it's safe to lift directly."""
+    match = re.match(r"^\[?(tp|sl)\s+([\d.]+)\]?$", comment.strip(), re.IGNORECASE)
     if not match:
         return None, None
     reason, price = match.groups()
@@ -59,24 +61,39 @@ def _parse_exit_comment(comment: str) -> tuple[str | None, float | None]:
 
 
 def pair_trades(deals: list[dict], source: str) -> list[dict]:
-    """Pair 'in'/'out' deals per symbol (FIFO) into structured trade records."""
-    open_by_symbol: dict[str, deque] = defaultdict(deque)
+    """Pair 'in'/'out' deals per symbol (FIFO) into structured trade records.
+
+    Queues are kept separate per (symbol, position side), not just per symbol.
+    A hedging-mode account (e.g. E-019) can hold many simultaneous buy AND
+    sell positions on the same symbol — MT5 always closes a position with a
+    deal of the OPPOSITE type (a "sell"-type deal closes a buy position, a
+    "buy"-type deal closes a sell position), so a single FIFO queue per
+    symbol would silently pair an exit with the wrong entry whenever both
+    directions are open at once. Splitting the queue by the *entry's* type
+    keeps each side's FIFO order correct."""
+    open_by_symbol_side: dict[tuple[str, str], deque] = defaultdict(deque)
     trades: list[dict] = []
 
     for deal in deals:
         direction = deal.get("direction", "").lower()
         symbol = deal.get("symbol", "")
+        deal_type = deal.get("type", "").lower()
 
         if not symbol or direction not in ("in", "out", "in/out"):
             continue  # balance/credit operations etc.
 
         if direction in ("in", "in/out"):
-            open_by_symbol[symbol].append(deal)
+            open_by_symbol_side[(symbol, deal_type)].append(deal)
             if direction == "in":
                 continue
 
-        if direction in ("out", "in/out") and open_by_symbol[symbol]:
-            entry = open_by_symbol[symbol].popleft() if direction == "out" else deal
+        if direction in ("out", "in/out"):
+            # An "out" deal's type is the opposite of the position it closes.
+            entry_side = "sell" if deal_type == "buy" else "buy"
+            queue = open_by_symbol_side[(symbol, entry_side)]
+            if not queue:
+                continue  # no matching open entry observed (e.g. report window cut off mid-position)
+            entry = queue.popleft() if direction == "out" else deal
             exit_deal = deal
 
             entry_time = _to_iso(entry.get("time", ""))

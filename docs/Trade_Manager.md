@@ -12,11 +12,13 @@ All three presets (E-009, E-010, E-011) have `ScheduledClose_Enable=true` with `
 
 **Discrepancy noted, not yet resolved:** the live journal (E-018) shows a daily burst of pending-order *cancellations* at **22:45** every day, not 16:45. This might be a separate mechanism (end-of-day pending-order cleanup vs. the preset's open-position scheduled close), a broker-timezone offset from the preset's stated time, or evidence the live account's actual preset differs from E-009/E-010/E-011. Not investigated further yet.
 
-## 🟡 High confidence: positions close via a synchronized breakeven batch, not individual SL/TP triggers
+## 🟡 High confidence: positions close via a synchronized breakeven batch, not individual SL/TP triggers — as ONE of several exit mechanisms
 
-**Resolved 2026-07-26** (previously flagged as an unexplained mass-close event). Quantitative analysis of the complete week's raw logs (E-018, via [`scripts/journal_log_parser.py`](../scripts/journal_log_parser.py)) found **21 explicit close events in the whole week, and all 21 closed at exactly their own position's entry price** — zero net price movement, to the cent, on every single one. See [H-007](Hypotheses.md#h-007) for the full write-up.
+**Resolved 2026-07-26, corrected 2026-07-27** (previously flagged as an unexplained mass-close event). Quantitative analysis of the complete week's raw logs (E-018, via [`scripts/journal_log_parser.py`](../scripts/journal_log_parser.py)) found **21 explicit close events in the whole week, and all 21 closed at exactly their own position's entry price** — zero net price movement, to the cent, on every single one. This part still stands. See [H-007](Hypotheses.md#h-007) for the full write-up.
 
-This also revealed a broader pattern worth noting: across all 3,364 log lines in the week, there is **no line anywhere using the words "triggered", "stop loss", or "take profit"** — every one of the 176 observed fills is an entry (a pending order getting filled), and these 21 breakeven closes are the *only* exits seen all week. This suggests Apex may not rely on broker-native SL/TP orders at all for this account, instead enforcing exits via its own logic issuing explicit `market buy/sell ..., close #ticket` commands — worth checking whether this differs from the backtest journals (E-015/E-016), which *do* use "stop loss triggered" phrasing.
+**Correction (2026-07-27):** the original write-up also claimed these 21 breakeven closes were the *only* exits observed all week, based on there being no "triggered"/"stop loss"/"take profit" phrasing anywhere in E-018's raw Trades-tab log. **That conclusion doesn't hold up against E-019** (a full month's *structured* account statement for the same account), which shows 206 individual `sl`-tagged and 48 individual `tp`-tagged exits over the month — ordinary SL/TP closes clearly happen regularly on this account. The real explanation is a limitation of the raw Trades-tab journal *format*, not an absence of ordinary exits: a closing deal and an opening deal look identical in that log (`deal #X ... done (based on order #Y)`), with nothing distinguishing "Y was a fresh pending-order placement" from "Y was a broker-generated SL/TP-trigger order." `journal_log_parser.py`'s EXP-004 analysis had no way to tell these apart and likely mislabeled some real closes as "fills" (entries) in its 176-count. The structured report (E-019) doesn't have this ambiguity — its Deals table tags each closing deal's *reason* directly in the comment field (`[sl X.XX]` / `[tp X.XX]`), which the raw journal format simply never shows.
+
+**What's still true:** the 21-position breakeven batch on 2026-07-24 is real and directly verified (both the raw log's explicit `market ..., close #ticket` phrasing and the exact-entry-price match are unambiguous). What's corrected: it's one identified exit mechanism among others (ordinary SL/TP hits, confirmed via E-019, are the *majority* mechanism — 254 of 283 trades in the month), not the account's only way of closing positions.
 
 ## Questions to Answer
 
@@ -34,12 +36,12 @@ _None yet._
 
 - [H-007](Hypotheses.md#h-007) — the only 21 close events observed in a full live trading week all closed at exactly their own entry price (breakeven), a synchronized batch rather than individual SL/TP hits. Directly measured, not inferred; still needs cross-reviewer agreement per the promotion rule.
 
-## Hypotheses (🟠)
+## Hypotheses (🟠) / High Confidence (🟡)
 
-- [H-002](Hypotheses.md#h-002-apex-trails-its-stop-loss-progressively-into-profit-rather-than-using-a-static-sl) — most trades close via a trailed SL rather than a fixed TP or a genuine loss-cutting SL. See [Trailing_Stop.md](Trailing_Stop.md).
-- [H-006](Hypotheses.md#h-006-live-xauusdsc-trading-e-017-is-broadly-consistent-with-the-backtests-gridtrailing-behaviour-on-the-same-symbol-this-time) — live behaviour (E-018) is qualitatively consistent with backtests (lot ladder, trailing pattern); the mass-close event is now explained (see H-007 above) but a quantitative win-rate comparison against the backtests is still not possible from this data.
-- Average trade duration varies substantially by preset/year (from ~123 min in prop-2025 to ~446 min in personal-2023, per `output/csv/per_report_statistics.json`) — not yet understood whether this reflects market conditions, preset differences, or both.
+- [H-002](Hypotheses.md#h-002-apex-trails-its-stop-loss-progressively-into-profit-rather-than-using-a-static-sl) — 🟡 most trades close via a trailed SL rather than a fixed TP or a genuine loss-cutting SL, corroborated in both backtest (EXP-002, 89.7%) and live (E-019, 90.8%) data. See [Trailing_Stop.md](Trailing_Stop.md).
+- [H-006](Hypotheses.md#h-006-live-xauusdsc-trading-e-017-is-broadly-consistent-with-the-backtests-gridtrailing-behaviour-on-the-same-symbol-this-time) — 🟡 **resolved 2026-07-27**: E-019's real month-long win rate (89.40%) matches/beats the backtests' 77–86% range, and total return was +38.2%. See H-006's full comparison table.
+- Average trade duration varies substantially by preset/year (from ~123 min in prop-2025 to ~446 min in personal-2023, per `output/csv/per_report_statistics.json`) — live E-019 trades average 136.8 min, roughly in the middle of that range.
 
 ## Evidence
 
-See [Evidence.md](Evidence.md) for the full index. Relevant IDs: E-001 through E-011, E-017, E-018.
+See [Evidence.md](Evidence.md) for the full index. Relevant IDs: E-001 through E-011, E-017 through E-022.

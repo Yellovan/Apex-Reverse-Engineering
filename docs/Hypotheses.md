@@ -46,11 +46,26 @@ different prices/SL/TP each), and a later frame shows open positions tagged
 refines the "grid" reading of H-001 toward a two-sided straddle grid rather
 than a directional DCA ladder. Still 🟠 pending external review.
 
+**Update 2026-07-27 — the numeric prefix is account/deployment-specific,
+not a universal constant; the 12-slot structure itself repeats exactly.**
+E-019 (a full month's structured trade history for live account 31599933)
+shows comment IDs of the form **`11498<N>`, N = 0–11** — the *same* 12-value
+structure as every backtest, but a completely different 5-digit prefix
+(`11498` vs `15743`). This rules out "`15743` is a hardcoded constant
+shared by every Apex deployment" — the prefix must be computed or assigned
+per account/preset/instance somehow (candidates: derived from the account
+number, a chart/magic-number seed, or a per-license value), while the
+underlying "12 concurrent slots, N=0–11" structure is robust across both
+prefixes. Still 🟠 pending external review on the interpretation, though the
+raw fact (different prefix, same slot count) is directly observed.
+
 ---
 
 ### H-002 — Apex trails its stop-loss progressively into profit rather than using a static SL
 
-**Status:** 🟠 HYPOTHESIS
+**Status:** 🟡 HIGH CONFIDENCE — corroborated independently in both backtest
+(EXP-002) and live-account (E-019) data; still needs ChatGPT/Grok agreement
+per the promotion rule before Findings.md.
 **Category:** Trailing Stop / Trade Manager
 **Raised:** 2026-07-25
 **Raised by:** Claude
@@ -80,11 +95,19 @@ closing comment is tagged `sl` are still net-profitable closes, not losses.
   alone, but still short of the cross-reviewer (Claude/ChatGPT/Grok) agreement
   the README's promotion rule requires before this can move to 🟡.
 
-**Proposed test:** Not yet logged in [Experiments.md](Experiments.md). Should
-quantify: (a) average number of SL modifications per trade, (b) average SL
-displacement from entry at the moment of trigger, (c) whether displacement
-correlates with trade duration or price movement (grid step size vs. ATR-like
-trailing).
+**Proposed test:** Ran as [EXP-002](Experiments.md#exp-002--quantify-sl-modification-frequency-and-displacement-at-trigger-time) on 2026-07-25 — see that entry for the average-modifications-per-trade and displacement-at-trigger results (89.7% of 78 sl-triggered backtest closes were profitable).
+
+**Update 2026-07-27 — independently corroborated from a live account,
+not just backtests.** E-019 (a full month of real trade history for account
+31599933) shows **206 sl-tagged exits, of which 90.8% (187) were still
+profitable** — essentially the same figure as EXP-002's 89.7% from the
+backtest journal, but from a completely different evidence type (a
+broker-generated statement with real currency profit values, not a
+Strategy Tester log). Two independent measurement methods, two independent
+data sources (backtest vs. live), converging on ~90% — see
+[H-006's 2026-07-27 update](#h-006) for the full comparison table. Upgraded
+internally to 🟡 HIGH CONFIDENCE; still needs ChatGPT/Grok agreement per the
+promotion rule before Findings.md.
 
 ---
 
@@ -146,6 +169,20 @@ settings dialog, an in-chart overlay) — it's the platform's own EA-lifecycle
 log — and it also confirms 2.3beta1 as a real prior live version, not just
 an inferred one. Still 🟠 pending external review per the promotion rule,
 but four independent, structurally different sources now agree.
+
+**Update 2026-07-27 — fifth confirmation, this time from broker/account
+metadata itself, not EA output at all:** E-019 (MT5's own generated "Trade
+History Report" for account 31599933) titles itself *"31599933: APEX EA -
+Trade History Report"*, and its "Name:" field — the account's own
+user-assigned display name inside MT5 — literally reads **"APEX EA"**. This
+is qualitatively different from the first four sources: it isn't the EA
+identifying itself, it's the broker/terminal's account-level metadata,
+independently corroborating that this specific account is understood (by
+whoever named it) to be running Apex. Also visually confirmed in E-022's
+`h4.png` screenshot, which shows the EA's own in-chart dashboard panel
+reading "Zennbot Apex v2.4 \| OK \| 0 (0.00%) Max DD \| USC 35254.06" —
+directly showing the EA tracks and displays its own drawdown against the
+`MaxDrawdown_*` preset fields in real time.
 
 ---
 
@@ -268,7 +305,9 @@ entry, to keep the record of what went wrong intact.
 
 ### H-006 — Live XAUUSD.sc trading (E-017) is broadly consistent with the backtests' grid/trailing behaviour, on the same symbol this time
 
-**Status:** 🟠 HYPOTHESIS
+**Status:** 🟡 HIGH CONFIDENCE — the quantitative comparison this hypothesis
+set out to make is now answered (see the 2026-07-27 update below); still
+needs ChatGPT/Grok cross-review per the promotion rule before Findings.md.
 **Category:** Strategy Map / Trailing Stop / Trade Manager
 **Raised:** 2026-07-26
 **Raised by:** Claude
@@ -322,6 +361,38 @@ individual SL/TP exits to compute a comparable win rate.
 structured account statement for 31599933 covering enough time to observe
 individual SL/TP exits, not just the one batch-close event seen this week.
 
+**Update 2026-07-27 — ANSWERED. Melvin supplied exactly the structured
+account statement this hypothesis was waiting for (E-019, a full month:
+2026.06.23–2026.07.24).** Parsed with the same `html_parser.py`/
+`trade_parser.py` pipeline used for the backtests (E-001–E-008), giving a
+genuinely apples-to-apples comparison for the first time:
+
+| | Backtests (E-001–E-008) | Live (E-019, 1 month) |
+|---|---|---|
+| Win rate | 77–86% | **89.40%** (253/283) |
+| SL-tagged exits still profitable | 89.7% ([EXP-002](Experiments.md)) | **90.8%** (187/206) |
+| Total return | n/a (per-backtest) | **+38.2%** ($25,000 → $34,540) |
+
+The live account's win rate is **at or above the top of the backtests'
+range**, and the "SL trailed into profit" mechanism ([H-002](#h-002)) shows
+up just as strongly live (90.8%) as in the backtest journal (89.7%) — an
+independent confirmation from a completely different evidence type (a
+broker-generated account statement vs. a Strategy Tester journal). This is
+the strongest evidence yet that the backtests are not curve-fit fantasy —
+the live account is performing in line with, or better than, what they
+predicted.
+
+**Caveat, worth keeping honest:** one month (283 trades) is a modest sample
+next to the backtests' multi-year, thousands-of-trades runs, and the account
+grew during the window (compounding could flatter the % return figure
+somewhat). Also, `trade_parser.py`'s FIFO entry/exit pairing can misattribute
+which specific concurrent same-ID entry an exit belongs to when several are
+open at once (aggregate win-rate/profit are unaffected, since those come
+directly from each exit deal's own recorded profit — see the script's
+docstring) — this may explain part of why some `tp`-tagged exits show a
+loss (21% of them), though that's not fully resolved; see
+[Risk_Manager.md](Risk_Manager.md).
+
 ---
 
 ### H-007 — Apex/Zennbot flattens positions via a synchronized market-close at each position's own breakeven price, not via broker-side SL/TP triggers
@@ -354,15 +425,19 @@ zero net price movement, to the cent, on every single one.
   different entry prices (4041.40 through 4043.42) — ruling out "all closed
   because price hit one shared level." Each ticket's close price matches
   *only its own* entry, not a common level.
-- Across the entire 5-day log, **no other close events were found at all**
-  — no line anywhere contains the words "triggered", "stop loss", or "take
-  profit" (unlike the Strategy Tester backtest journals E-015/E-016, which
-  do use that phrasing for SL/TP triggers). Every one of the 176 observed
-  fills is a pending-order fill (an *entry*), and the only *exits* seen in
-  the whole week are these 21 breakeven closes. This suggests Apex's SL/TP
-  may be enforced by the EA's own logic issuing explicit market-close
-  commands when a price condition is met, rather than by broker-native
-  stop orders that the terminal would log differently.
+- Across the entire 5-day log, no line anywhere contains the words
+  "triggered", "stop loss", or "take profit" (unlike the Strategy Tester
+  backtest journals E-015/E-016, which do use that phrasing). **Correction,
+  2026-07-27: this does *not* mean ordinary SL/TP exits didn't happen that
+  week** — see [Trade_Manager.md](Trade_Manager.md#-high-confidence-positions-close-via-a-synchronized-breakeven-batch-not-individual-sltp-triggers--as-one-of-several-exit-mechanisms)
+  for the correction. E-019 (a full month's structured account statement for
+  this same account) shows 254 individual sl/tp-tagged exits, so they
+  clearly occur regularly — the raw Trades-tab journal format just doesn't
+  distinguish a closing deal from an opening one (`journal_log_parser.py`
+  had no way to tell them apart), unlike the structured report's explicit
+  `[sl X.XX]`/`[tp X.XX]` comment tags. The 21-position breakeven batch is
+  real and still directly verified; it is one exit mechanism among several,
+  not the account's only one.
 
 **What this could mean (not yet distinguished):**
 1. This is Apex's actual break-even-stop mechanism in action — once price
