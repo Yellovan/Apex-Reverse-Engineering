@@ -1,3 +1,12 @@
+//+------------------------------------------------------------------+
+//| Reconstruction, not a verified clone -- see docs/Pending_Orders.md |
+//| and docs/Trailing_Stop.md in the Apex-Reverse-Engineering repo for |
+//| the underlying evidence. Grid ladder + trail model are measured    |
+//| from real Apex data; the spike-guard is a deliberate, NON-Apex     |
+//| addition, currently OFF by default (2026-07-30 walk-forward test   |
+//| showed the in-sample-"best" setting was the out-of-sample worst --|
+//| see the Spike Guard input group below for the numbers).            |
+//+------------------------------------------------------------------+
 #property copyright   "ZennApex Research"
 #property version     "2.00"
 #property description "Multi-layer mirrored pending-stop grid for XAUUSD, calibrated against real Apex evidence"
@@ -53,7 +62,15 @@ input bool              InpTradeOnMonday    = true;
 input bool              InpTradeOnFriday    = true;
 
 input group "=== Spike Guard (NOT observed Apex behaviour -- deliberate safety addition) ==="
-input bool              InpUseSpikeGuard    = true;   // backtested +4.49 vs -0.55 pts/spike expected value, n=82, 14 weeks
+// Default OFF as of 2026-07-30: an in-sample sweep on 2026-04-20..07-30
+// found ATR=3.0 as the "best" setting (+4.49 vs -0.55 pts/spike), but an
+// out-of-sample test on 2026-01-01..04-19 (not used for tuning) reversed
+// this completely -- guard-off ($23,146) beat baseline ($22,906), which
+// beat the "tuned" ATR=3.0 ($22,055, the WORST of the three). This is a
+// textbook overfitting signature, not a validated edge. Leave off until
+// a regime-conditional version (only active in genuinely choppy periods,
+// not blanket-on) is designed and walk-forward tested.
+input bool              InpUseSpikeGuard    = false;
 input double            InpSpikeRangeAtr    = 6.0;    // flag a bar as a "spike" if its M1 range >= this x recent avg 1-min range
 input double            InpSpikeInitialFrac = 0.35;   // fraction of normal lot taken immediately on a spike-triggered breakout
 input double            InpSpikeRetestPts   = 15.0;   // pullback (points) required before adding the remaining size
@@ -117,6 +134,9 @@ struct PendingAddOn
    double sl_dist;        // same tier's SL/TP distance -- the add-on gets its own
    double tp_dist;        // protective stop too, it does NOT inherit one automatically
    datetime deadline;
+   bool   awaiting_fill;  // true = a reduced order was placed, wait for it to fill first;
+                           // false = no immediate entry at all (lot too small to reduce,
+                           // see TryPlaceOrPromoteLayer), go straight to watching the retest
 };
 PendingAddOn g_pending_addons[];
 
@@ -437,9 +457,29 @@ void TryPlaceOrPromoteLayer(long magic, const LayerConfig &layer, ENUM_ORDER_TYP
    }
    if(ticket != 0) return;
 
-   double place_lot = lot;
+   // On the smallest tiers, lot*InpSpikeInitialFrac rounds back up to the
+   // broker's minimum lot -- i.e. the SAME as the full size, so "reducing"
+   // does nothing and the spike-guard's whole point (don't take full size
+   // right at the spike extreme) would be silently defeated. When that
+   // happens, defer the ENTIRE lot to the retest instead of placing
+   // anything immediately, rather than falling back to a full-size entry.
+   double full_lot = NormalizeLot(lot);
+   double place_lot = full_lot;
+   bool fully_deferred = false;
    if(is_spike_side)
-      place_lot = NormalizeLot(lot * InpSpikeInitialFrac);
+   {
+      double reduced_lot = NormalizeLot(lot * InpSpikeInitialFrac);
+      if(reduced_lot >= full_lot - 1e-9)
+      {
+         fully_deferred = true;
+         if(InpLogActions)
+            Print(layer.tag, ": spike lot too small to reduce (full=", full_lot,
+                  ") -- deferring entire size to retest, no immediate entry");
+         RegisterPendingAddOn(magic, type, want_price, full_lot, layer.sl_dist, layer.tp_dist, false);
+         return;
+      }
+      place_lot = reduced_lot;
+   }
    if(place_lot <= 0)
    {
       if(InpLogActions) Print(layer.tag, ": skipped, place_lot<=0 (lot=", lot, " frac-applied=", is_spike_side, ")");
@@ -489,7 +529,7 @@ void TryPlaceOrPromoteLayer(long magic, const LayerConfig &layer, ENUM_ORDER_TYP
    // add on a confirmed retest. Not observed Apex behaviour -- see header.
    if(sent && is_spike_side && place_lot < lot - 1e-9)
    {
-      RegisterPendingAddOn(magic, type, want_price, lot - place_lot, layer.sl_dist, layer.tp_dist);
+      RegisterPendingAddOn(magic, type, want_price, lot - place_lot, layer.sl_dist, layer.tp_dist, true);
    }
 }
 
@@ -512,7 +552,7 @@ double NormalizeLot(double lot)
 //| trailing loop picks it up and manages it on its own thereafter.   |
 //+------------------------------------------------------------------+
 void RegisterPendingAddOn(long magic, ENUM_ORDER_TYPE type, double entry_ref_price,
-                           double remaining_lot, double sl_dist, double tp_dist)
+                           double remaining_lot, double sl_dist, double tp_dist, bool awaiting_fill)
 {
    int n = ArraySize(g_pending_addons);
    ArrayResize(g_pending_addons, n + 1);
@@ -525,6 +565,7 @@ void RegisterPendingAddOn(long magic, ENUM_ORDER_TYPE type, double entry_ref_pri
    g_pending_addons[n].sl_dist       = sl_dist;
    g_pending_addons[n].tp_dist       = tp_dist;
    g_pending_addons[n].deadline      = TimeCurrent() + InpSpikeLookoutMin * 60;
+   g_pending_addons[n].awaiting_fill = awaiting_fill;
 }
 
 void ManagePendingAddOns()
@@ -538,8 +579,11 @@ void ManagePendingAddOns()
          continue;
       }
 
-      // Only act once the reduced position actually exists (fill confirmed).
-      if(a.ticket == 0)
+      // "Partial" mode: only act once the reduced position actually exists
+      // (fill confirmed). "Fully deferred" mode (awaiting_fill=false, see
+      // TryPlaceOrPromoteLayer) has no initial order at all -- skip straight
+      // to watching the retest condition below.
+      if(a.awaiting_fill && a.ticket == 0)
       {
          if(!HasPosition(a.magic, a.dir > 0 ? POSITION_TYPE_BUY : POSITION_TYPE_SELL))
             continue;
