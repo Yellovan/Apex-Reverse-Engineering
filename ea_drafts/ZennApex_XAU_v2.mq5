@@ -56,6 +56,30 @@ input double            InpMinOffset        = 8.0;
 input double            InpUpdateDistance   = 25.0;
 input bool              InpOnlyOnNewBar     = true;
 
+input group "=== Daily Loss Limit (tested 2026-07-30, NOT recommended as implemented) ==="
+// Aimed at the failure pattern seen repeatedly this week: a single bad
+// day (FOMC 2026-07-29, the 114984 correlated double-loss 2026-07-21)
+// dominates a much longer stretch of otherwise-fine trading. Stops NEW
+// entries once today's loss from day-start equity crosses the limit;
+// existing positions keep trailing normally (never force-closed).
+//
+// Backtested at 3% across the same 5 quarters as Time Guard: it only
+// triggered at all in 2 of 5 periods, and where it did trigger the
+// result was WORSE, not better (2026 Jan-Apr: -$408.25; 2025 Q4: +$1.17,
+// negligible). Most likely reason: blocking new entries doesn't stop a
+// drawdown already in progress (existing positions aren't touched), it
+// just also blocks the recovery/rebound trades that would otherwise
+// follow -- the same "missed_by_retest" trades averaged +18 to +23
+// points when just left alone (docs/Pending_Orders.md spike analysis).
+// A pure "stop entering" circuit breaker fights this grid's actual edge
+// (catch many opportunities, trail winners) rather than protecting it.
+// Left in the code, defaulted off, as a tested-negative result -- a
+// smarter version (e.g. reducing NEW-tier lot size rather than blocking
+// entirely, or only pausing the tightest/most correlated tiers) might
+// fare differently but hasn't been tried.
+input bool              InpUseDailyLossLimit = false;
+input double            InpDailyLossLimitPct = 3.0;    // % of day-start equity
+
 input group "=== Filters ==="
 input double            InpMaxSpread        = 0.80;
 input bool              InpTradeOnMonday    = true;
@@ -159,6 +183,8 @@ int      g_digits;
 datetime g_last_cancel_day = 0;
 datetime g_last_bar_time   = 0;
 bool     g_was_in_vol_window = false;
+datetime g_loss_limit_day  = 0;
+double   g_day_start_equity = 0.0;
 
 // Spike-guard state: tickets waiting for a retest add-on
 struct PendingAddOn
@@ -241,6 +267,7 @@ void OnTick()
 {
    g_sym.RefreshRates();
    UpdateRecentRange();
+   UpdateDailyLossTracking();
    ManagePositions();
    ManagePendingAddOns();
    CheckScheduledCancel();
@@ -377,19 +404,62 @@ bool IsTradingAllowed(string &reason)
       return false;
    }
 
+   if(InpUseDailyLossLimit && g_day_start_equity > 0)
+   {
+      double equity = AccountInfoDouble(ACCOUNT_EQUITY);
+      double loss_pct = (g_day_start_equity - equity) / g_day_start_equity * 100.0;
+      if(loss_pct >= InpDailyLossLimitPct)
+      {
+         reason = StringFormat("daily loss limit hit (%.2f%% >= %.2f%%, day-start equity=%.2f, now=%.2f)",
+                                loss_pct, InpDailyLossLimitPct, g_day_start_equity, equity);
+         return false;
+      }
+   }
+
    return true;
+}
+
+//+------------------------------------------------------------------+
+//| Tracks equity at the start of each calendar day, so the daily loss |
+//| limit measures drawdown FROM TODAY, not from whenever the EA       |
+//| happened to attach. Existing positions are never force-closed by   |
+//| this -- only NEW entries get blocked once the limit is hit         |
+//| (see IsTradingAllowed) -- open trades keep trailing normally.      |
+//+------------------------------------------------------------------+
+void UpdateDailyLossTracking()
+{
+   MqlDateTime dt;
+   TimeToStruct(TimeCurrent(), dt);
+   datetime day0 = StringToTime(StringFormat("%04d.%02d.%02d", dt.year, dt.mon, dt.day));
+   if(g_loss_limit_day == day0) return;
+
+   g_loss_limit_day   = day0;
+   g_day_start_equity = AccountInfoDouble(ACCOUNT_EQUITY);
 }
 
 //+------------------------------------------------------------------+
 void LogBlockedOnce(const string reason)
 {
    if(!InpLogActions || reason == "") return;
-   static string last_reason = "";
+   // Throttle on a STABLE key (text up to the first digit/number), not the
+   // full message -- several reasons embed live numbers (loss %, equity,
+   // current time) that change every tick, which silently defeated this
+   // throttle entirely (proven 2026-07-30: 40,000+ near-duplicate log
+   // lines for a single blocked period instead of one every 5 minutes).
+   int cut = StringLen(reason);
+   for(int i = 0; i < StringLen(reason); i++)
+   {
+      ushort c = StringGetCharacter(reason, i);
+      if(c >= '0' && c <= '9') { cut = i; break; }
+   }
+   string key = StringSubstr(reason, 0, cut);
+
+   static string last_key = "";
    static datetime last_print = 0;
    datetime now = TimeCurrent();
-   if(reason == last_reason && (now - last_print) < 300) return;   // throttle: max once/5min per reason
+   if(key == last_key && (now - last_print) < 300) return;   // throttle: max once/5min per reason category
    Print("ZennApexV2: grid paused -- ", reason);
-   last_reason = reason;
+   last_key = key;
    last_print = now;
 }
 
