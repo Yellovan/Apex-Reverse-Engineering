@@ -185,6 +185,19 @@ int OnInit()
 
    ArrayInitialize(g_recent_ranges, 0.0);
 
+   // Same real-world gotcha bit ApexLogger last week: OnInit() always runs
+   // once on attach, but if Algo Trading is off (globally, or "Allow Algo
+   // Trading" unticked for this EA specifically), OnTick() never fires
+   // again afterward -- the EA looks loaded but silently does nothing.
+   bool termAllowed = (bool)TerminalInfoInteger(TERMINAL_TRADE_ALLOWED);
+   bool mqlAllowed  = (bool)MQLInfoInteger(MQL_TRADE_ALLOWED);
+   if(!termAllowed || !mqlAllowed)
+      Print("!!! ZennApexV2 WARNING: Algo Trading looks DISABLED (terminal=", termAllowed,
+            " this-EA=", mqlAllowed, "). OnTick will likely never fire. Check the 'Algo Trading' ",
+            "toolbar button AND this EA's Properties -> Common -> 'Allow Algo Trading', then re-attach.");
+   else
+      Print("ZennApexV2: Algo Trading permissions OK.");
+
    Print("ZennApexV2 v2.00 | ", g_symbol,
          " Layers=", MathMin(InpMaxLayers, ArraySize(g_layers)),
          " BaseLot=", InpBaseLot,
@@ -205,8 +218,12 @@ void OnTick()
    ManagePendingAddOns();
    CheckScheduledCancel();
 
-   if(!IsTradingAllowed())
+   string block_reason = "";
+   if(!IsTradingAllowed(block_reason))
+   {
+      LogBlockedOnce(block_reason);
       return;
+   }
 
    if(InpOnlyOnNewBar)
    {
@@ -262,25 +279,46 @@ bool IsSpikeBarNow(int &out_dir)
 }
 
 //+------------------------------------------------------------------+
-bool IsTradingAllowed()
+bool IsTradingAllowed(string &reason)
 {
    MqlDateTime dt;
    TimeToStruct(TimeCurrent(), dt);
 
-   if(dt.day_of_week == 0 || dt.day_of_week == 6) return false;
-   if(dt.day_of_week == 1 && !InpTradeOnMonday)    return false;
-   if(dt.day_of_week == 5 && !InpTradeOnFriday)    return false;
+   if(dt.day_of_week == 0 || dt.day_of_week == 6) { reason = "weekend"; return false; }
+   if(dt.day_of_week == 1 && !InpTradeOnMonday)   { reason = "Monday disabled (InpTradeOnMonday)"; return false; }
+   if(dt.day_of_week == 5 && !InpTradeOnFriday)   { reason = "Friday disabled (InpTradeOnFriday)"; return false; }
 
    int now_m    = dt.hour * 60 + dt.min;
    int cancel_m = InpCancelHour * 60 + InpCancelMinute;
    int start_m  = InpStartHour  * 60 + InpStartMinute;
    if(start_m < cancel_m && (now_m < start_m || now_m >= cancel_m))
+   {
+      reason = StringFormat("outside session window (now=%02d:%02d, start=%02d:%02d, cancel=%02d:%02d)",
+                             dt.hour, dt.min, InpStartHour, InpStartMinute, InpCancelHour, InpCancelMinute);
       return false;
+   }
 
-   if((g_sym.Ask() - g_sym.Bid()) > InpMaxSpread)
+   double spread = g_sym.Ask() - g_sym.Bid();
+   if(spread > InpMaxSpread)
+   {
+      reason = StringFormat("spread too wide (%.2f > InpMaxSpread=%.2f)", spread, InpMaxSpread);
       return false;
+   }
 
    return true;
+}
+
+//+------------------------------------------------------------------+
+void LogBlockedOnce(const string reason)
+{
+   if(!InpLogActions || reason == "") return;
+   static string last_reason = "";
+   static datetime last_print = 0;
+   datetime now = TimeCurrent();
+   if(reason == last_reason && (now - last_print) < 300) return;   // throttle: max once/5min per reason
+   Print("ZennApexV2: grid paused -- ", reason);
+   last_reason = reason;
+   last_print = now;
 }
 
 //+------------------------------------------------------------------+
@@ -425,13 +463,34 @@ void TryPlaceOrPromoteLayer(long magic, const LayerConfig &layer, ENUM_ORDER_TYP
    double place_lot = lot;
    if(is_spike_side)
       place_lot = NormalizeLot(lot * InpSpikeInitialFrac);
-   if(place_lot <= 0 || !HasMarginRoom(place_lot)) return;
+   if(place_lot <= 0)
+   {
+      if(InpLogActions) Print(layer.tag, ": skipped, place_lot<=0 (lot=", lot, " frac-applied=", is_spike_side, ")");
+      return;
+   }
+   if(!HasMarginRoom(place_lot))
+   {
+      if(InpLogActions) Print(layer.tag, ": skipped, no margin room for lot=", place_lot,
+                               " equity=", AccountInfoDouble(ACCOUNT_EQUITY),
+                               " margin=", AccountInfoDouble(ACCOUNT_MARGIN));
+      return;
+   }
 
    double sl = is_buy ? NormalizeDouble(want_price - layer.sl_dist, g_digits)
                        : NormalizeDouble(want_price + layer.sl_dist, g_digits);
    double tp = is_buy ? NormalizeDouble(want_price + layer.tp_dist, g_digits)
                        : NormalizeDouble(want_price - layer.tp_dist, g_digits);
-   if(!IsPendingValid(type, want_price, sl, tp)) return;
+   if(!IsPendingValid(type, want_price, sl, tp))
+   {
+      if(InpLogActions)
+      {
+         long stops = SymbolInfoInteger(g_symbol, SYMBOL_TRADE_STOPS_LEVEL);
+         Print(layer.tag, ": IsPendingValid rejected ", is_buy ? "BUY_STOP" : "SELL_STOP",
+               " price=", want_price, " sl=", sl, " tp=", tp,
+               " bid=", g_sym.Bid(), " ask=", g_sym.Ask(), " stops_level_pts=", stops);
+      }
+      return;
+   }
 
    g_trade.SetExpertMagicNumber(magic);
    string cmt = StringFormat("%s|%s|%s", InpTradeComment, layer.tag, is_buy ? "B" : "S");
@@ -443,6 +502,11 @@ void TryPlaceOrPromoteLayer(long magic, const LayerConfig &layer, ENUM_ORDER_TYP
    if(sent && InpLogActions)
       Print(layer.tag, is_spike_side ? " SPIKE-REDUCED " : " ", is_buy ? "BUY STOP" : "SELL STOP",
             " ", place_lot, " @ ", want_price, " SL=", sl, " TP=", tp);
+   else if(!sent)
+      Print(layer.tag, ": ORDER FAILED ", is_buy ? "BUY_STOP" : "SELL_STOP",
+            " lot=", place_lot, " price=", want_price, " sl=", sl, " tp=", tp,
+            " retcode=", g_trade.ResultRetcode(),
+            " (", g_trade.ResultRetcodeDescription(), ")");
 
    // If this was a reduced spike-side entry, register the remaining size to
    // add on a confirmed retest. Not observed Apex behaviour -- see header.
