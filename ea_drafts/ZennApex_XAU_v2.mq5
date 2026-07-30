@@ -85,18 +85,24 @@ input group "=== Time Guard (calendar-based, tested 2026-07-30) ==="
 // anchored to an externally verifiable calendar, not a mined threshold --
 // lower overfitting risk than the ATR-based spike guard above.
 //
-// Default OFF as of 2026-07-30: walk-forward result is a genuine MIXED
-// signal, not a clean pass. Out-of-sample (2026-01-01..04-19, never used
-// to derive these hours): +$1,392.64 (guard-off $23,146 -> guard-on
-// $24,539). But in-sample (2026-04-20..07-30, the window the pattern
-// came from): -$728.90 (guard-off $24,194 -> guard-on $23,465) -- the
-// OPPOSITE direction of ordinary overfitting. Most likely explanation:
-// with only ~14-15 weeks per window and each dominated by a handful of
-// major news days, a single event landing differently can swing an
-// entire period's result -- the sample is too small to call this
-// validated either way yet. Leave off until tested across more
-// independent periods, or let the live paper-test (RoboForex, running
-// since 2026-07-30) accumulate enough real data to judge it directly.
+// Default OFF as of 2026-07-30, updated after extending to 5 independent
+// ~3-month windows (originally just 2 gave a contradictory result):
+//   2026 Jan-Apr (the first OOS test): +$1,392.64
+//   2026 Apr-Jul (the window the pattern came from): -$728.90
+//   2025 Apr-Jun:                                    -$235.63
+//   2025 Jul-Sep:                                     +$41.80
+//   2025 Oct-Dec:                                    +$766.93
+// 3 of 5 periods positive, net +$1,236.84 across all 5 combined -- a
+// meaningfully more credible picture than the original 2-window test
+// (which was a straight contradiction), and a completely different
+// result than the ATR-based spike guard (which was unambiguously
+// negative out-of-sample -- a clear no). This looks like a plausible,
+// moderate edge, not proven beyond doubt but no longer just noise.
+// Still defaulted off: real period-to-period variance remains (the
+// -$728.90 quarter is real), and 5 quarters is still not a large sample
+// for a strategy this news-event-driven. Turn on for further live
+// paper-testing (RoboForex, running since 2026-07-30) or more backtested
+// periods before trusting it as a default.
 input bool              InpUseTimeGuard      = false;
 input int               InpVolWin1StartHour  = 15;    // ~US data releases / NYSE open (13:30 UTC = 16:30 here, padded)
 input int               InpVolWin1StartMin   = 0;
