@@ -279,7 +279,59 @@ int OnInit()
    return INIT_SUCCEEDED;
 }
 
-void OnDeinit(const int reason) { }
+void OnDeinit(const int reason)
+{
+   if(!MQLInfoInteger(MQL_TESTER)) return;
+   PrintTierPnLSummary();
+}
+
+//+------------------------------------------------------------------+
+//| Backtest-only diagnostic: aggregate closed-trade P&L per tier      |
+//| (by magic number) so lot-allocation reweighting can be based on    |
+//| measured performance instead of a guess.                          |
+//+------------------------------------------------------------------+
+void PrintTierPnLSummary()
+{
+   int n = ArraySize(g_layers);
+   double tier_profit[]; ArrayResize(tier_profit, n); ArrayInitialize(tier_profit, 0.0);
+   double tier_lots[];   ArrayResize(tier_lots, n);   ArrayInitialize(tier_lots, 0.0);
+   int    tier_trades[]; ArrayResize(tier_trades, n); ArrayInitialize(tier_trades, 0);
+   int    tier_wins[];   ArrayResize(tier_wins, n);   ArrayInitialize(tier_wins, 0);
+
+   if(!HistorySelect(0, TimeCurrent())) return;
+   int total = HistoryDealsTotal();
+   for(int i = 0; i < total; i++)
+   {
+      ulong deal = HistoryDealGetTicket(i);
+      if(deal == 0) continue;
+      if((ENUM_DEAL_ENTRY)HistoryDealGetInteger(deal, DEAL_ENTRY) != DEAL_ENTRY_OUT) continue;
+      long magic = HistoryDealGetInteger(deal, DEAL_MAGIC);
+      int tier = (int)(magic - InpMagic);
+      if(tier < 0 || tier >= n) continue;
+
+      double profit = HistoryDealGetDouble(deal, DEAL_PROFIT)
+                     + HistoryDealGetDouble(deal, DEAL_SWAP)
+                     + HistoryDealGetDouble(deal, DEAL_COMMISSION);
+      double lot    = HistoryDealGetDouble(deal, DEAL_VOLUME);
+
+      tier_profit[tier] += profit;
+      tier_lots[tier]   += lot;
+      tier_trades[tier]++;
+      if(profit > 0) tier_wins[tier]++;
+   }
+
+   Print("=== TIER P&L SUMMARY (test end ", TimeToString(TimeCurrent(), TIME_DATE), ") ===");
+   for(int t = 0; t < n; t++)
+   {
+      if(tier_trades[t] == 0) continue;
+      double profit_per_lot = (tier_lots[t] > 0) ? tier_profit[t] / tier_lots[t] : 0.0;
+      double win_rate = 100.0 * tier_wins[t] / tier_trades[t];
+      Print("TIER ", g_layers[t].tag, " (magic ", InpMagic + t, ") mult=", DoubleToString(g_layers[t].lot_mult, 2),
+            " trades=", tier_trades[t], " win%=", DoubleToString(win_rate, 1),
+            " totalP&L=", DoubleToString(tier_profit[t], 2),
+            " P&L/lot=", DoubleToString(profit_per_lot, 2));
+   }
+}
 
 //+------------------------------------------------------------------+
 void OnTick()
