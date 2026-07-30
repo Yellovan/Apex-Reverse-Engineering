@@ -16,7 +16,15 @@ Behavioural analysis of Apex's trailing-stop logic, if any.
 
 ## Confirmed (🟢)
 
-_None yet._
+**Break-even trigger and trail step size, measured across 3 independent live accounts, 2026-07-30.** For each fill+modify sequence, the SL's distance from entry at its first move to the profit side (the "BE lock") and the size of each subsequent favorable adjustment (the "trail step") were computed directly from real SL-modify events — no fitting, no inference:
+
+| Account | Matched tickets | BE lock (median) | Trail step (median) |
+|---|---|---|---|
+| ultima_live (Ultima Markets) | 1554 | 1.07 | 1.24 |
+| funden_propfirm | 104 | 1.06 | 1.03 |
+| roboforex_live (RoboForex) | 246 | 1.07 | 0.95 |
+
+The BE-lock trigger is remarkably consistent (1.06–1.07 across three different brokers/accounts) — strong evidence this is a fixed Apex/Zennbot constant, not something tuned per account. Trail step is a bit more variable (0.95–1.24) but stays in the same narrow band. This is a **continuous, fine-grained trailing model** (SL nudged by roughly one point at a time, very frequently — the 1554-ticket ultima_live sample alone came from 40,274 total modify events) rather than the discrete, chunky step-then-jump behaviour the earlier `v1.21` EA reconstruction draft assumed; `ea_drafts/ZennApex_XAU_v2.mq5` was rebuilt around a continuous-trailing-distance model to match.
 
 ## High Confidence (🟡)
 
@@ -29,4 +37,4 @@ _None yet._
 
 ## Evidence
 
-See [Evidence.md](Evidence.md) for the full index. Relevant IDs: E-001 through E-008 (aggregate exit-reason/win-rate statistics), E-016 (granular journal log showing the SL modification sequence), E-017 (live journal, same trailing pattern).
+See [Evidence.md](Evidence.md) for the full index. Relevant IDs: E-001 through E-008 (aggregate exit-reason/win-rate statistics), E-016 (granular journal log showing the SL modification sequence), E-017 (live journal, same trailing pattern), 2026-07-30 raw journal batch across 3 accounts (ultima_live/funden_propfirm/roboforex_live, not yet assigned individual Evidence IDs — see research/DailyNotes.md).
