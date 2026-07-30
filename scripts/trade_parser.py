@@ -60,8 +60,30 @@ def _parse_exit_comment(comment: str) -> tuple[str | None, float | None]:
     return reason.lower(), _to_float(price)
 
 
+def _pop_matching_volume(queue: deque, target_volume: float | None, tol: float = 1e-6):
+    """Pop the OLDEST queued entry whose volume matches the closing deal's
+    volume, not just the oldest entry regardless of size.
+
+    Proven necessary 2026-07-30 (E-019 re-analysis): two 0.38-lot closing
+    deals at 2026.07.21 14:36:10/11 were previously FIFO-paired against a
+    0.42-lot and a 0.04-lot entry from DIFFERENT grid IDs — a volume
+    mismatch that's easy to catch mechanically but wasn't being checked.
+    The real 0.38-lot entry (grid ID 114989, entered 09:42:04) was left
+    unmatched. Falls back to plain FIFO (oldest, any size) only if no
+    volume match exists in the queue at all, since an exit must be
+    attributed to *something* rather than silently dropped."""
+    if target_volume is not None:
+        for i, candidate in enumerate(queue):
+            cand_vol = _to_float(candidate.get("volume"))
+            if cand_vol is not None and abs(cand_vol - target_volume) <= tol:
+                del queue[i]
+                return candidate
+    return queue.popleft() if queue else None
+
+
 def pair_trades(deals: list[dict], source: str) -> list[dict]:
-    """Pair 'in'/'out' deals per symbol (FIFO) into structured trade records.
+    """Pair 'in'/'out' deals per symbol (FIFO, volume-matched) into
+    structured trade records.
 
     Queues are kept separate per (symbol, position side), not just per symbol.
     A hedging-mode account (e.g. E-019) can hold many simultaneous buy AND
@@ -70,7 +92,10 @@ def pair_trades(deals: list[dict], source: str) -> list[dict]:
     "buy"-type deal closes a sell position), so a single FIFO queue per
     symbol would silently pair an exit with the wrong entry whenever both
     directions are open at once. Splitting the queue by the *entry's* type
-    keeps each side's FIFO order correct."""
+    keeps each side's FIFO order correct. Within a queue, entries are further
+    matched by volume (see _pop_matching_volume) since multiple concurrent
+    same-side entries of DIFFERENT sizes are common on this grid strategy,
+    and plain oldest-first FIFO can grab the wrong one."""
     open_by_symbol_side: dict[tuple[str, str], deque] = defaultdict(deque)
     trades: list[dict] = []
 
@@ -93,7 +118,12 @@ def pair_trades(deals: list[dict], source: str) -> list[dict]:
             queue = open_by_symbol_side[(symbol, entry_side)]
             if not queue:
                 continue  # no matching open entry observed (e.g. report window cut off mid-position)
-            entry = queue.popleft() if direction == "out" else deal
+            if direction == "out":
+                entry = _pop_matching_volume(queue, _to_float(deal.get("volume")))
+                if entry is None:
+                    continue
+            else:
+                entry = deal
             exit_deal = deal
 
             entry_time = _to_iso(entry.get("time", ""))
