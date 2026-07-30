@@ -445,6 +445,14 @@ void TryPlaceOrPromoteLayer(long magic, const LayerConfig &layer, ENUM_ORDER_TYP
    ENUM_POSITION_TYPE ptype = is_buy ? POSITION_TYPE_BUY : POSITION_TYPE_SELL;
    if(HasPosition(magic, ptype)) return;
 
+   // A spike-guard add-on (reduced-then-add-on, or fully-deferred) already
+   // owns this magic's entry decision -- without this check, the routine
+   // grid refresh on the NEXT bar would place a normal full-size order for
+   // the same tier while the add-on is still waiting on its retest,
+   // silently overriding the whole point of deferring/reducing it.
+   if(HasPendingAddOnFor(magic))
+      return;
+
    double existing_price = 0;
    ulong ticket = FindPending(magic, type, existing_price);
    if(ticket > 0)
@@ -620,6 +628,14 @@ void RemoveAddOn(int i)
    int n = ArraySize(g_pending_addons);
    g_pending_addons[i] = g_pending_addons[n - 1];
    ArrayResize(g_pending_addons, n - 1);
+}
+
+bool HasPendingAddOnFor(long magic)
+{
+   for(int i = 0; i < ArraySize(g_pending_addons); i++)
+      if(g_pending_addons[i].magic == magic)
+         return true;
+   return false;
 }
 
 //+------------------------------------------------------------------+
