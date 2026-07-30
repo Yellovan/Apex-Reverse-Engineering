@@ -62,6 +62,49 @@ input group "=== Tier-Scaled Trail (NOT observed Apex behaviour -- tested experi
 input bool              InpUseTierScaledTrail = false;
 input double            InpTrailDistanceRatio = 0.026;  // effective trail = layer.sl_dist * this ratio (~InpTrailDistance/avg_sl_dist)
 
+input group "=== Swing-Structure Trail (NOT observed Apex behaviour -- tested experiment) ==="
+// Idea: instead of the tight, Apex-calibrated continuous trail (median step
+// ~1.24pt), trail behind the recent swing low/high with a breathing-room
+// buffer, so winners get more room through normal pullbacks. Direct real-
+// world motivation: live trade 2026-07-30 12:10 closed at 4075.8 via the
+// tight trail while price ran to 4081 -- ~5pts of upside given back.
+// Deliberate deviation, not a reconstruction fix -- mutually exclusive with
+// InpUseTierScaledTrail (swing trail wins if both are on). Must be
+// backtested across all 5 established periods before being trusted.
+input bool              InpUseSwingTrail    = false;
+input int               InpSwingLookback    = 20;    // closed bars scanned for the swing low/high
+input double            InpSwingBufferPts   = 1.0;   // breathing-room buffer beyond the swing extreme (points)
+
+input group "=== Time/Loss Stop for Never-Profitable Positions (NOT observed Apex behaviour -- tested experiment) ==="
+// Finding 2026-07-30 (jan-apr 2026 drawdown drilldown): during a sustained
+// trend, positions that never reach profit sit at their full original tier
+// SL (up to 93pts) for as long as it takes -- no protection kicks in until
+// then, since ManagePositions() never touches a position's SL before it
+// crosses InpBE_Trigger. Deliberate addition: force-close a never-
+// profitable position early instead of always waiting for the full tier SL
+// distance. Independent of InpUseSwingTrail -- test both separately before
+// combining.
+//
+// RESULT (backtest 2026-07-30, both variants tested across the 5
+// established periods): BOTH are net negative -- this whole "cut losers
+// early" direction doesn't work for this grid architecture. Time-based
+// (InpTimeStopBars=48) was mostly a no-op (net -$148 combined) because by
+// ~2 days a position has almost always already resolved itself via the
+// normal SL. Loss-magnitude-based (InpMaxLossPts) only does something once
+// set below the tiers' own SL distances (14-93pts) -- at 40pts it actively
+// HURTS, worst of all in the exact jan-apr 2026 period this was built to
+// fix: profit went from +$1369 to -$2131 AND drawdown got worse (23.5% ->
+// 25.9%). Root cause: this is a grid strategy -- an underwater position is
+// *expected* to sit there and recover via the grid's own mean-reversion
+// mechanic; cutting it early on a fixed price distance just realizes
+// losses that the wide, Apex-calibrated tier SLs were specifically sized
+// to ride out. Left OFF by default, documented as tested-negative, same as
+// InpUseDailyLossLimit / InpUseTierScaledTrail.
+input bool              InpUseTimeStop      = false;
+input int               InpTimeStopBars     = 48;    // H1 bars (~2 trading days) before a never-profitable losing position gets force-closed
+input bool              InpUseLossCap       = false;
+input double            InpMaxLossPts       = 40.0;  // force-close a never-profitable position once unrealized loss exceeds this many points -- must be below the widest tier SL distances (up to 92.6) to ever actually intervene
+
 input group "=== Session ==="
 input int               InpCancelHour       = 22;     // live evidence shows pending cleanup ~22:45 server time
 input int               InpCancelMinute     = 45;
@@ -195,6 +238,27 @@ LayerConfig g_layers[] =
 CTrade        g_trade;
 CSymbolInfo   g_sym;
 
+// Tickets that have been trailed at least once (SL moved off its original
+// placement level) -- tracked explicitly rather than inferred from SL
+// distance, since fill slippage on the entry vs. the planned trigger price
+// makes a distance-based "never touched" heuristic unreliable.
+ulong g_trailed_tickets[];
+
+bool WasEverTrailed(ulong ticket)
+{
+   for(int i = 0; i < ArraySize(g_trailed_tickets); i++)
+      if(g_trailed_tickets[i] == ticket) return true;
+   return false;
+}
+
+void MarkTrailed(ulong ticket)
+{
+   if(WasEverTrailed(ticket)) return;
+   int n = ArraySize(g_trailed_tickets);
+   ArrayResize(g_trailed_tickets, n + 1);
+   g_trailed_tickets[n] = ticket;
+}
+
 string   g_symbol;
 double   g_point;
 double   g_tick_size;
@@ -204,6 +268,8 @@ datetime g_last_bar_time   = 0;
 bool     g_was_in_vol_window = false;
 datetime g_loss_limit_day  = 0;
 double   g_day_start_equity = 0.0;
+double   g_equity_peak     = 0.0;   // tester-only drawdown watcher
+double   g_max_dd_pct      = 0.0;
 
 // Spike-guard state: tickets waiting for a retest add-on
 struct PendingAddOn
@@ -231,6 +297,9 @@ bool     g_recent_ranges_full = false;
 //+------------------------------------------------------------------+
 int OnInit()
 {
+   if(MQLInfoInteger(MQL_TESTER))
+      FileDelete("zennapex_dd_log_" + (InpUseSwingTrail ? "swon" : "swoff") + ".csv", FILE_COMMON);
+
    g_symbol = _Symbol;
    string u = g_symbol;
    StringToUpper(u);
@@ -274,7 +343,10 @@ int OnInit()
          " TimeGuard=", InpUseTimeGuard ? "ON" : "OFF",
          " win1=", StringFormat("%02d:%02d-%02d:%02d", InpVolWin1StartHour, InpVolWin1StartMin, InpVolWin1EndHour, InpVolWin1EndMin),
          " win2=", StringFormat("%02d:%02d-%02d:%02d", InpVolWin2StartHour, InpVolWin2StartMin, InpVolWin2EndHour, InpVolWin2EndMin),
-         " TrailDist=", InpTrailDistance);
+         " TrailDist=", InpTrailDistance,
+         " SwingTrail=", InpUseSwingTrail ? StringFormat("ON(lookback=%d,buf=%.1f)", InpSwingLookback, InpSwingBufferPts) : "OFF",
+         " TimeStop=", InpUseTimeStop ? StringFormat("ON(bars=%d)", InpTimeStopBars) : "OFF",
+         " LossCap=", InpUseLossCap ? StringFormat("ON(pts=%.0f)", InpMaxLossPts) : "OFF");
 
    return INIT_SUCCEEDED;
 }
@@ -283,6 +355,59 @@ void OnDeinit(const int reason)
 {
    if(!MQLInfoInteger(MQL_TESTER)) return;
    PrintTierPnLSummary();
+}
+
+//+------------------------------------------------------------------+
+//| Backtest-only diagnostic: track running equity drawdown and log a  |
+//| dated snapshot of every open position whenever a NEW max-drawdown  |
+//| record is set, so a bad drawdown episode can be traced back to     |
+//| exactly which tiers/positions caused it.                          |
+//+------------------------------------------------------------------+
+// Optimization-mode passes (needed to route around a busy local Tester-
+// agent port) silently drop Expert Print() / Journal output entirely --
+// only OnInit's prints survive. FileWrite with FILE_COMMON does not have
+// this problem (it's real disk I/O, not the Journal), so use that instead
+// for anything that needs to survive an optimization-routed run.
+void CsvAppend(string line)
+{
+   string fname = "zennapex_dd_log_" + (InpUseSwingTrail ? "swon" : "swoff") + ".csv";
+   int handle = FileOpen(fname, FILE_READ | FILE_WRITE | FILE_TXT | FILE_COMMON | FILE_ANSI);
+   if(handle == INVALID_HANDLE) return;
+   FileSeek(handle, 0, SEEK_END);
+   FileWriteString(handle, line + "\n");
+   FileClose(handle);
+}
+
+void UpdateDrawdownWatcher()
+{
+   if(!MQLInfoInteger(MQL_TESTER)) return;
+   double equity = AccountInfoDouble(ACCOUNT_EQUITY);
+   if(equity > g_equity_peak) g_equity_peak = equity;
+   if(g_equity_peak <= 0) return;
+
+   double dd_pct = 100.0 * (g_equity_peak - equity) / g_equity_peak;
+   if(dd_pct <= g_max_dd_pct + 0.5) return;   // only new records, throttled
+
+   g_max_dd_pct = dd_pct;
+   CsvAppend("NEW_MAX_DD," + DoubleToString(dd_pct, 2) + "," + DoubleToString(equity, 2) +
+             "," + DoubleToString(g_equity_peak, 2) + "," + TimeToString(TimeCurrent(), TIME_DATE | TIME_MINUTES));
+
+   int total = PositionsTotal();
+   for(int i = 0; i < total; i++)
+   {
+      ulong ticket = PositionGetTicket(i);
+      if(ticket == 0 || !PositionSelectByTicket(ticket)) continue;
+      if(PositionGetString(POSITION_SYMBOL) != g_symbol) continue;
+      long magic = PositionGetInteger(POSITION_MAGIC);
+      int tier = (int)(magic - InpMagic);
+      string tag = (tier >= 0 && tier < ArraySize(g_layers)) ? g_layers[tier].tag : "?";
+      ENUM_POSITION_TYPE type = (ENUM_POSITION_TYPE)PositionGetInteger(POSITION_TYPE);
+      CsvAppend("DD_POS," + tag + "," + EnumToString(type) +
+                "," + DoubleToString(PositionGetDouble(POSITION_VOLUME), 2) +
+                "," + DoubleToString(PositionGetDouble(POSITION_PRICE_OPEN), g_digits) +
+                "," + DoubleToString(PositionGetDouble(POSITION_SL), g_digits) +
+                "," + DoubleToString(PositionGetDouble(POSITION_PROFIT), 2));
+   }
 }
 
 //+------------------------------------------------------------------+
@@ -339,6 +464,8 @@ void OnTick()
    g_sym.RefreshRates();
    UpdateRecentRange();
    UpdateDailyLossTracking();
+   UpdateDrawdownWatcher();
+   CheckTimeStops();
    ManagePositions();
    ManagePendingAddOns();
    CheckScheduledCancel();
@@ -898,6 +1025,53 @@ double CalcLot(const LayerConfig &layer)
 }
 
 //+------------------------------------------------------------------+
+//| Deliberate deviations: force-close a position that has never been  |
+//| trailed (never reached InpBE_Trigger profit) once either it's been |
+//| open too long (InpUseTimeStop) or its unrealized loss exceeds a    |
+//| cap (InpUseLossCap), instead of always waiting for the full tier   |
+//| SL distance to be hit. Independently toggleable.                   |
+//+------------------------------------------------------------------+
+void CheckTimeStops()
+{
+   if(!InpUseTimeStop && !InpUseLossCap) return;
+
+   int total = PositionsTotal();
+   for(int i = total - 1; i >= 0; i--)
+   {
+      ulong ticket = PositionGetTicket(i);
+      if(ticket == 0 || !PositionSelectByTicket(ticket)) continue;
+      if(PositionGetString(POSITION_SYMBOL) != g_symbol) continue;
+      long magic = PositionGetInteger(POSITION_MAGIC);
+      if(magic < InpMagic || magic >= InpMagic + ArraySize(g_layers)) continue;
+      int tier = (int)(magic - InpMagic);
+
+      double entry  = PositionGetDouble(POSITION_PRICE_OPEN);
+      ENUM_POSITION_TYPE type = (ENUM_POSITION_TYPE)PositionGetInteger(POSITION_TYPE);
+      int    dir    = (type == POSITION_TYPE_BUY) ? 1 : -1;
+      double price  = (type == POSITION_TYPE_BUY) ? g_sym.Bid() : g_sym.Ask();
+      double profit_pts = dir * (price - entry);
+      if(profit_pts >= 0) continue;   // only ever cuts positions currently at a loss
+
+      if(WasEverTrailed(ticket)) continue;   // was profitable at some point -- not a "never-profitable" straggler
+
+      int bars_open = 0;
+      bool hit_time = false;
+      if(InpUseTimeStop)
+      {
+         datetime open_time = (datetime)PositionGetInteger(POSITION_TIME);
+         bars_open = iBarShift(g_symbol, PERIOD_CURRENT, open_time, false);
+         hit_time = (bars_open >= InpTimeStopBars);
+      }
+      bool hit_loss = InpUseLossCap && (-profit_pts >= InpMaxLossPts);
+      if(!hit_time && !hit_loss) continue;
+
+      if(g_trade.PositionClose(ticket) && InpLogActions)
+         Print(hit_loss ? "LOSS_CAP #" : "TIME_STOP #", ticket, " tier=", g_layers[tier].tag,
+               " bars_open=", bars_open, " loss_pts=", DoubleToString(profit_pts, 2));
+   }
+}
+
+//+------------------------------------------------------------------+
 //| Continuous trailing model (replaces v1.21's discrete-step model). |
 //| Calibrated from 40,274 real SL-modify events across 1554 matched  |
 //| tickets (2026-07-30 re-analysis): median first-profit-lock ~1.07  |
@@ -926,35 +1100,60 @@ void ManagePositions()
       double profit  = dir * (price - entry);
       double sl_lock = (cur_sl > 0) ? dir * (cur_sl - entry) : -999;
 
-      // Trail distance: flat InpTrailDistance by default (matches observed
-      // Apex behaviour -- no clean tier-dependent pattern in real data), or
-      // optionally scaled per-tier by the position's own SL distance as a
-      // deliberate, tested-not-observed experiment (InpUseTierScaledTrail).
-      double trail_dist = InpTrailDistance;
-      if(InpUseTierScaledTrail)
-      {
-         int tier = (int)(magic - InpMagic);
-         trail_dist = g_layers[tier].sl_dist * InpTrailDistanceRatio;
-      }
-
-      // Desired lock = profit minus the trailing distance, floored at the
-      // BE buffer once triggered. Never move SL backwards (only forward).
-      double desired_lock;
       if(profit < InpBE_Trigger)
          continue;   // not yet in enough profit to touch SL at all
-      if(sl_lock < InpBE_LockBuffer - 1e-9)
-         desired_lock = InpBE_LockBuffer;                       // first move: lock the BE buffer
+
+      double desired_lock;
+      double new_sl;
+
+      if(InpUseSwingTrail)
+      {
+         // Structure-based: trail behind the recent closed-bar swing low/
+         // high (plus a breathing-room buffer) instead of a fixed price
+         // offset, so a normal pullback doesn't stop the trade out early.
+         int idx_low  = iLowest(g_symbol, PERIOD_CURRENT, MODE_LOW, InpSwingLookback, 1);
+         int idx_high = iHighest(g_symbol, PERIOD_CURRENT, MODE_HIGH, InpSwingLookback, 1);
+         double buffer = InpSwingBufferPts * g_point;
+         if(dir == 1)
+            new_sl = NormalizeDouble(iLow(g_symbol, PERIOD_CURRENT, idx_low) - buffer, g_digits);
+         else
+            new_sl = NormalizeDouble(iHigh(g_symbol, PERIOD_CURRENT, idx_high) + buffer, g_digits);
+         desired_lock = dir * (new_sl - entry);
+      }
       else
-         desired_lock = profit - trail_dist;                    // continuous trail behind price
+      {
+         // Trail distance: flat InpTrailDistance by default (matches
+         // observed Apex behaviour -- no clean tier-dependent pattern in
+         // real data), or optionally scaled per-tier by the position's own
+         // SL distance as a deliberate, tested-not-observed experiment
+         // (InpUseTierScaledTrail).
+         double trail_dist = InpTrailDistance;
+         if(InpUseTierScaledTrail)
+         {
+            int tier = (int)(magic - InpMagic);
+            trail_dist = g_layers[tier].sl_dist * InpTrailDistanceRatio;
+         }
+         // Desired lock = profit minus the trailing distance, floored at
+         // the BE buffer once triggered.
+         if(sl_lock < InpBE_LockBuffer - 1e-9)
+            desired_lock = InpBE_LockBuffer;                    // first move: lock the BE buffer
+         else
+            desired_lock = profit - trail_dist;                 // continuous trail behind price
+         new_sl = NormalizeDouble(entry + dir * desired_lock, g_digits);
+      }
 
+      // Never move SL backwards (only forward), and avoid order-spam for
+      // moves smaller than the min step.
       if(desired_lock <= sl_lock + InpTrailMinStepSize)
-         continue;   // not enough improvement yet -- avoid order-spam
+         continue;
 
-      double new_sl = NormalizeDouble(entry + dir * desired_lock, g_digits);
       if(IsSLValid(type, price, new_sl))
       {
-         if(g_trade.PositionModify(ticket, new_sl, cur_tp) && InpLogActions)
-            Print("TRAIL #", ticket, " lock=", DoubleToString(desired_lock, 2));
+         if(g_trade.PositionModify(ticket, new_sl, cur_tp))
+         {
+            MarkTrailed(ticket);
+            if(InpLogActions) Print("TRAIL #", ticket, " lock=", DoubleToString(desired_lock, 2));
+         }
       }
    }
 }
