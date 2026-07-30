@@ -43,6 +43,25 @@ input double            InpBE_LockBuffer    = 0.8;    // initial lock distance o
 input double            InpTrailDistance    = 1.3;    // continuous trailing distance behind price once in profit -- median step observed 1.24
 input double            InpTrailMinStepSize = 0.15;   // don't re-modify for moves smaller than this (avoid order-spam; observed p10 step was 0.16)
 
+input group "=== Tier-Scaled Trail (NOT observed Apex behaviour -- tested experiment) ==="
+// Real per-tier trail data (2026-07-30) shows NO clean relationship
+// between a tier's SL distance and its trail step -- BE-lock is
+// genuinely uniform (0.78-1.23 across lot sizes), trail-step variance
+// looks like measurement noise, not a tier-dependent pattern. So this
+// is NOT a reconstruction fix, it's a deliberate deviation, tested
+// purely on whether it's more PROFITABLE than the universal
+// InpTrailDistance -- same discipline as Time Guard / Daily Loss Limit.
+//
+// RESULT (backtest 2026-07-30, 5 independent periods, ratios 0.020/
+// 0.026/0.035 vs flat InpTrailDistance=1.3): net effect is noise-level.
+// Best ratio (0.026, the flat-equivalent midpoint) only nets +$14.67
+// combined across all 5 periods (vs swings of -$1800..+$100 per period
+// individually) and is positive in just 3/5 periods -- no consistent
+// edge. Left OFF by default; documented as a tested-negative feature,
+// same as InpUseDailyLossLimit.
+input bool              InpUseTierScaledTrail = false;
+input double            InpTrailDistanceRatio = 0.026;  // effective trail = layer.sl_dist * this ratio (~InpTrailDistance/avg_sl_dist)
+
 input group "=== Session ==="
 input int               InpCancelHour       = 22;     // live evidence shows pending cleanup ~22:45 server time
 input int               InpCancelMinute     = 45;
@@ -855,6 +874,17 @@ void ManagePositions()
       double profit  = dir * (price - entry);
       double sl_lock = (cur_sl > 0) ? dir * (cur_sl - entry) : -999;
 
+      // Trail distance: flat InpTrailDistance by default (matches observed
+      // Apex behaviour -- no clean tier-dependent pattern in real data), or
+      // optionally scaled per-tier by the position's own SL distance as a
+      // deliberate, tested-not-observed experiment (InpUseTierScaledTrail).
+      double trail_dist = InpTrailDistance;
+      if(InpUseTierScaledTrail)
+      {
+         int tier = (int)(magic - InpMagic);
+         trail_dist = g_layers[tier].sl_dist * InpTrailDistanceRatio;
+      }
+
       // Desired lock = profit minus the trailing distance, floored at the
       // BE buffer once triggered. Never move SL backwards (only forward).
       double desired_lock;
@@ -863,7 +893,7 @@ void ManagePositions()
       if(sl_lock < InpBE_LockBuffer - 1e-9)
          desired_lock = InpBE_LockBuffer;                       // first move: lock the BE buffer
       else
-         desired_lock = profit - InpTrailDistance;               // continuous trail behind price
+         desired_lock = profit - trail_dist;                    // continuous trail behind price
 
       if(desired_lock <= sl_lock + InpTrailMinStepSize)
          continue;   // not enough improvement yet -- avoid order-spam

@@ -32,3 +32,6 @@ output/reports/*
 
 # Videos are large; track via Git LFS if added (see .gitattributes), never commit raw temp exports
 data/videos/*.tmp
+
+# Compiled MQL5 binaries -- build artifacts, not source
+ea_drafts/*.ex5
