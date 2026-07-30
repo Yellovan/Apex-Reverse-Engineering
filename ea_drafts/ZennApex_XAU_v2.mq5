@@ -1,37 +1,3 @@
-//+------------------------------------------------------------------+
-//|                                             ZennApex_XAU_v2.mq5  |
-//|  Reverse-engineered from behavioural evidence (Apex-Reverse-     |
-//|  Engineering project, E-001 through E-022 + 2026-07-30 batch     |
-//|  re-analysis of 4 live/propfirm accounts, ~4 months, 8300+ fills)|
-//|                                                                    |
-//|  v2 changes vs v1.21 draft (ea_drafts/ZennApex_XAU_v1.21.mq5):    |
-//|   - 11-tier SL/TP ladder replaced with values MEASURED from 634   |
-//|     real order placements (docs/Pending_Orders.md), not guessed.  |
-//|   - Trail model rebuilt from 40k+ real SL-modify events across    |
-//|     1554 matched tickets: Apex trails continuously in small steps |
-//|     (median ~1.1-1.2 points), not big discrete jumps -- switched  |
-//|     from a staircase TrailStep model to a continuous trailing     |
-//|     distance model to match observed behaviour.                   |
-//|   - NEW, not part of the original Apex behaviour: optional        |
-//|     volatility-spike guard (InpUseSpikeGuard). Backtested against |
-//|     82 real 1-min price spikes over 14 weeks of XAUUSD.sc M1 data |
-//|     (2026-04-20 to 2026-07-30): immediate entry into a spike      |
-//|     averaged -0.55 pts/spike; scaling in with retest confirmation |
-//|     averaged +4.49 pts/spike (roughly 5-8x better expected value, |
-//|     consistent across two independent sample sizes, n=49 and      |
-//|     n=82). This is a deliberate DEVIATION from faithfully cloning |
-//|     Apex -- it's the "safer than the current breakout" mechanism  |
-//|     requested 2026-07-30, not a reproduction of observed Apex     |
-//|     logic (Apex's own evidence shows no retest/pullback behaviour |
-//|     anywhere -- see docs/Trade_Manager.md).                       |
-//|                                                                    |
-//|  STATUS: reconstruction, not a verified clone. L3/L4/L6/L7/I/F/B/J|
-//|  SL-TP pairs match measured data almost exactly; the grid's exact |
-//|  OFFSET-from-mid per tier is still unconfirmed (no evidence source|
-//|  records concurrent bid/ask at placement time -- see              |
-//|  docs/Pending_Orders.md open question). Test on a small account   |
-//|  before scaling up.                                                |
-//+------------------------------------------------------------------+
 #property copyright   "ZennApex Research"
 #property version     "2.00"
 #property description "Multi-layer mirrored pending-stop grid for XAUUSD, calibrated against real Apex evidence"
@@ -225,15 +191,29 @@ void OnTick()
       return;
    }
 
+   // Spike detection must run every tick/minute -- NOT gated behind
+   // InpOnlyOnNewBar's chart-period throttle. On an H1 chart, gating it
+   // there meant the spike check only ever fired once per hour (missing
+   // 59 of every 60 minutes) -- found via the 2026-07 backtest showing
+   // zero spike-guard triggers despite a known FOMC spike in that window.
+   int spike_dir = 0;
+   bool spike_now = InpUseSpikeGuard && IsSpikeBarNow(spike_dir);
+
+   bool run_grid = spike_now;   // a fresh spike always gets an immediate reaction
    if(InpOnlyOnNewBar)
    {
       datetime t = iTime(g_symbol, PERIOD_CURRENT, 0);
-      if(t == g_last_bar_time)
-         return;
-      g_last_bar_time = t;
+      if(t != g_last_bar_time)
+      {
+         g_last_bar_time = t;
+         run_grid = true;
+      }
    }
+   else
+      run_grid = true;
 
-   ManageGrid();
+   if(run_grid)
+      ManageGrid(spike_now, spike_dir);
 }
 
 //+------------------------------------------------------------------+
@@ -411,13 +391,10 @@ bool HasPosition(long magic, ENUM_POSITION_TYPE type)
 }
 
 //+------------------------------------------------------------------+
-void ManageGrid()
+void ManageGrid(bool spike_now, int spike_dir)
 {
    int n = MathMin(InpMaxLayers, ArraySize(g_layers));
    double mid = (g_sym.Ask() + g_sym.Bid()) * 0.5;
-
-   int spike_dir = 0;
-   bool spike_now = InpUseSpikeGuard && IsSpikeBarNow(spike_dir);
 
    for(int i = 0; i < n; i++)
    {
