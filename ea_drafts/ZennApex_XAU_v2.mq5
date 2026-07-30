@@ -76,6 +76,37 @@ input double            InpSpikeInitialFrac = 0.35;   // fraction of normal lot 
 input double            InpSpikeRetestPts   = 15.0;   // pullback (points) required before adding the remaining size
 input int               InpSpikeLookoutMin  = 60;     // give up waiting for the retest after this many minutes
 
+input group "=== Time Guard (calendar-based, tested 2026-07-30) ==="
+// 82 real spikes (2026-04-20..07-30, server time) showed whipsaw rate
+// nearly DOUBLES inside two windows lining up with known US macro release
+// times: 83% (n=41) inside these windows vs 46% (n=41) outside. Unlike
+// the price/volume-shape signals tried first (RVOL: correlation 0.09,
+// no signal; spread-widening: correlation -0.02, no signal), this is
+// anchored to an externally verifiable calendar, not a mined threshold --
+// lower overfitting risk than the ATR-based spike guard above.
+//
+// Default OFF as of 2026-07-30: walk-forward result is a genuine MIXED
+// signal, not a clean pass. Out-of-sample (2026-01-01..04-19, never used
+// to derive these hours): +$1,392.64 (guard-off $23,146 -> guard-on
+// $24,539). But in-sample (2026-04-20..07-30, the window the pattern
+// came from): -$728.90 (guard-off $24,194 -> guard-on $23,465) -- the
+// OPPOSITE direction of ordinary overfitting. Most likely explanation:
+// with only ~14-15 weeks per window and each dominated by a handful of
+// major news days, a single event landing differently can swing an
+// entire period's result -- the sample is too small to call this
+// validated either way yet. Leave off until tested across more
+// independent periods, or let the live paper-test (RoboForex, running
+// since 2026-07-30) accumulate enough real data to judge it directly.
+input bool              InpUseTimeGuard      = false;
+input int               InpVolWin1StartHour  = 15;    // ~US data releases / NYSE open (13:30 UTC = 16:30 here, padded)
+input int               InpVolWin1StartMin   = 0;
+input int               InpVolWin1EndHour    = 18;
+input int               InpVolWin1EndMin     = 0;
+input int               InpVolWin2StartHour  = 20;    // ~FOMC statement (18:00 UTC = 21:00 here, padded both ways)
+input int               InpVolWin2StartMin   = 50;
+input int               InpVolWin2EndHour    = 22;
+input int               InpVolWin2EndMin     = 0;
+
 input group "=== Debug ==="
 input bool              InpLogActions       = true;
 
@@ -121,6 +152,7 @@ double   g_tick_size;
 int      g_digits;
 datetime g_last_cancel_day = 0;
 datetime g_last_bar_time   = 0;
+bool     g_was_in_vol_window = false;
 
 // Spike-guard state: tickets waiting for a retest add-on
 struct PendingAddOn
@@ -188,6 +220,9 @@ int OnInit()
          " Layers=", MathMin(InpMaxLayers, ArraySize(g_layers)),
          " BaseLot=", InpBaseLot,
          " SpikeGuard=", InpUseSpikeGuard ? "ON" : "OFF",
+         " TimeGuard=", InpUseTimeGuard ? "ON" : "OFF",
+         " win1=", StringFormat("%02d:%02d-%02d:%02d", InpVolWin1StartHour, InpVolWin1StartMin, InpVolWin1EndHour, InpVolWin1EndMin),
+         " win2=", StringFormat("%02d:%02d-%02d:%02d", InpVolWin2StartHour, InpVolWin2StartMin, InpVolWin2EndHour, InpVolWin2EndMin),
          " TrailDist=", InpTrailDistance);
 
    return INIT_SUCCEEDED;
@@ -219,7 +254,20 @@ void OnTick()
    int spike_dir = 0;
    bool spike_now = InpUseSpikeGuard && IsSpikeBarNow(spike_dir);
 
-   bool run_grid = spike_now;   // a fresh spike always gets an immediate reaction
+   // Time-guard: a detected spike has a direction (only that side gets
+   // cautious treatment); the calendar window doesn't, so BOTH sides get
+   // it whenever we're inside a known-risky window.
+   bool in_vol_window = InpUseTimeGuard && IsInVolatileWindow();
+   bool window_edge = (in_vol_window != g_was_in_vol_window);   // entering OR leaving
+   g_was_in_vol_window = in_vol_window;
+
+   bool caution_buy  = (spike_now && spike_dir > 0) || in_vol_window;
+   bool caution_sell = (spike_now && spike_dir < 0) || in_vol_window;
+
+   // React immediately on: a fresh spike, or crossing a time-window
+   // boundary (entering -> get cautious now; leaving -> revert to normal
+   // sizing now, don't wait up to an hour either way).
+   bool run_grid = spike_now || window_edge;
    if(InpOnlyOnNewBar)
    {
       datetime t = iTime(g_symbol, PERIOD_CURRENT, 0);
@@ -233,7 +281,25 @@ void OnTick()
       run_grid = true;
 
    if(run_grid)
-      ManageGrid(spike_now, spike_dir);
+      ManageGrid(caution_buy, caution_sell);
+}
+
+//+------------------------------------------------------------------+
+bool IsInVolatileWindow()
+{
+   MqlDateTime dt;
+   TimeToStruct(TimeCurrent(), dt);
+   int now_m = dt.hour * 60 + dt.min;
+
+   int w1s = InpVolWin1StartHour * 60 + InpVolWin1StartMin;
+   int w1e = InpVolWin1EndHour   * 60 + InpVolWin1EndMin;
+   if(now_m >= w1s && now_m < w1e) return true;
+
+   int w2s = InpVolWin2StartHour * 60 + InpVolWin2StartMin;
+   int w2e = InpVolWin2EndHour   * 60 + InpVolWin2EndMin;
+   if(now_m >= w2s && now_m < w2e) return true;
+
+   return false;
 }
 
 //+------------------------------------------------------------------+
@@ -411,7 +477,7 @@ bool HasPosition(long magic, ENUM_POSITION_TYPE type)
 }
 
 //+------------------------------------------------------------------+
-void ManageGrid(bool spike_now, int spike_dir)
+void ManageGrid(bool caution_buy, bool caution_sell)
 {
    int n = MathMin(InpMaxLayers, ArraySize(g_layers));
    double mid = (g_sym.Ask() + g_sym.Bid()) * 0.5;
@@ -431,16 +497,18 @@ void ManageGrid(bool spike_now, int spike_dir)
       if(g_sym.Bid() - want_sell < InpMinOffset)
          want_sell = NormalizeDouble(g_sym.Bid() - InpMinOffset, g_digits);
 
-      TryPlaceOrPromoteLayer(magic, layer, ORDER_TYPE_BUY_STOP, want_buy, lot,
-                              spike_now && spike_dir > 0);
-      TryPlaceOrPromoteLayer(magic, layer, ORDER_TYPE_SELL_STOP, want_sell, lot,
-                              spike_now && spike_dir < 0);
+      TryPlaceOrPromoteLayer(magic, layer, ORDER_TYPE_BUY_STOP, want_buy, lot, caution_buy);
+      TryPlaceOrPromoteLayer(magic, layer, ORDER_TYPE_SELL_STOP, want_sell, lot, caution_sell);
    }
 }
 
 void TryPlaceOrPromoteLayer(long magic, const LayerConfig &layer, ENUM_ORDER_TYPE type,
-                             double want_price, double lot, bool is_spike_side)
+                             double want_price, double lot, bool is_caution_side)
 {
+   // is_caution_side: true if EITHER a detected price spike OR the
+   // calendar time-guard (docs/Trade_Manager.md) says this side of this
+   // tier should get the reduced/deferred treatment right now.
+   bool is_spike_side = is_caution_side;  // internal alias, minimal diff below
    bool is_buy = (type == ORDER_TYPE_BUY_STOP);
    ENUM_POSITION_TYPE ptype = is_buy ? POSITION_TYPE_BUY : POSITION_TYPE_SELL;
    if(HasPosition(magic, ptype)) return;
@@ -481,7 +549,7 @@ void TryPlaceOrPromoteLayer(long magic, const LayerConfig &layer, ENUM_ORDER_TYP
       {
          fully_deferred = true;
          if(InpLogActions)
-            Print(layer.tag, ": spike lot too small to reduce (full=", full_lot,
+            Print(layer.tag, ": caution lot too small to reduce (full=", full_lot,
                   ") -- deferring entire size to retest, no immediate entry");
          RegisterPendingAddOn(magic, type, want_price, full_lot, layer.sl_dist, layer.tp_dist, false);
          return;
@@ -525,7 +593,7 @@ void TryPlaceOrPromoteLayer(long magic, const LayerConfig &layer, ENUM_ORDER_TYP
    g_trade.SetExpertMagicNumber(InpMagic);
 
    if(sent && InpLogActions)
-      Print(layer.tag, is_spike_side ? " SPIKE-REDUCED " : " ", is_buy ? "BUY STOP" : "SELL STOP",
+      Print(layer.tag, is_spike_side ? " CAUTION-REDUCED " : " ", is_buy ? "BUY STOP" : "SELL STOP",
             " ", place_lot, " @ ", want_price, " SL=", sl, " TP=", tp);
    else if(!sent)
       Print(layer.tag, ": ORDER FAILED ", is_buy ? "BUY_STOP" : "SELL_STOP",
